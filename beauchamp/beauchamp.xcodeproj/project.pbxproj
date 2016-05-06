@@ -63,7 +63,6 @@
 		7D35CB0D1CDB1556009511E5 = {
 			isa = PBXGroup;
 			children = (
-				7D35CB3A1CDB22CE009511E5 /* CommonCrypto */,
 				7D35CB191CDB1556009511E5 /* beauchamp */,
 				7D35CB251CDB1556009511E5 /* beauchampTests */,
 				7D35CB181CDB1556009511E5 /* Products */,
@@ -108,13 +107,6 @@
 				7D35CB361CDB197A009511E5 /* Prediction.swift */,
 			);
 			name = Model;
-			sourceTree = "<group>";
-		};
-		7D35CB3A1CDB22CE009511E5 /* CommonCrypto */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = CommonCrypto;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,6 +286,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -336,6 +329,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_INCLUDE_PATHS = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
