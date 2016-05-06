@@ -11,7 +11,7 @@ import Foundation
 struct Study {
     
     let description: String
-    var options: [Option] {
+    var options: Set<Option> {
         didSet {
             predictions = []
             for option in options {
@@ -20,6 +20,15 @@ struct Study {
         }
     }
     private(set) var predictions: [Prediction] = []
+    
+    init(description: String, options: Set<Option>) {
+        self.description = description
+        self.options = options
+        self.predictions = []
+        for option in options {
+            predictions.append(Prediction(option: option, confidence: calculateConfidence(option)))
+        }
+    }
     
     func getMostLikelyPrediciton() -> Prediction? {
         
@@ -39,18 +48,15 @@ struct Study {
     
     private func calculateConfidence( option:Option ) -> Double {
         
-        guard options.count > 0 else {
-            return 0.0
-        }
-    
-        var totalEncounters = 0
-        for option in options {
-            totalEncounters += option.timesEncountered
+        guard options.contains(option) else {
+            return 0
         }
         
-        let normalizedEncounters = Double(totalEncounters)/Double(options.count)
+        if option.timesEncountered == 0 {
+            return 0
+        }
         
-        return Double(option.timesTaken)/normalizedEncounters
+        return Double(option.timesTaken)/Double(option.timesEncountered)
         
     }
     
