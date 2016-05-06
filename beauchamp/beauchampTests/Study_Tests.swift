@@ -109,4 +109,51 @@ class Study_Tests: XCTestCase {
         
     }
     
+    func test_recordEncounter() {
+        
+        let option1 = Option(description: "Option 1")
+        let option2 = Option(description: "Option 2")
+        let option3 = Option(description: "Option 3")
+        objectUnderTest = Study(description: "Test study 3", options: [option1, option2, option3])
+        
+        for option in objectUnderTest.options {
+            XCTAssertTrue(option.timesEncountered == 0)
+        }
+        
+        objectUnderTest.recordEncounter()
+        
+        for option in objectUnderTest.options {
+            XCTAssertTrue(option.timesEncountered == 1)
+        }
+        
+    }
+    
+    func test_recordOptionTaken() {
+        
+        let option1 = Option(description: "Option 1")
+        let option2 = Option(description: "Option 2")
+        objectUnderTest = Study(description: "Test study 3", options: [option1])
+        
+        XCTAssertTrue(objectUnderTest.options.first?.timesTaken == 0)
+        XCTAssertTrue(objectUnderTest.options.first?.timesEncountered == 0)
+        
+        objectUnderTest.recordOptionTaken(option1)
+        
+        XCTAssertTrue(objectUnderTest.options.first?.timesTaken == 1)
+        XCTAssertTrue(objectUnderTest.options.first?.timesEncountered == 1)
+        
+        objectUnderTest.recordOptionTaken(option2)
+        
+        XCTAssertTrue(objectUnderTest.options.count == 2)
+        
+        for option in objectUnderTest.options {
+            if option == option2 {
+                XCTAssertTrue(option.timesTaken == 1)
+                XCTAssertTrue(option.timesEncountered == 1)
+                break
+            }
+        }
+        
+    }
+    
 }

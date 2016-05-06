@@ -46,6 +46,31 @@ struct Study {
         
     }
     
+    mutating func recordEncounter() {
+        
+        let myOptions = options
+        options.removeAll()
+        for option in myOptions {
+            var mutableOption = option
+            mutableOption.timesEncountered += 1
+            options.insert(mutableOption)
+        }
+        
+    }
+    
+    mutating func recordOptionTaken( option: Option ) {
+        
+        var mutableOption = option
+        mutableOption.timesTaken += 1
+        if mutableOption.timesEncountered < mutableOption.timesTaken {
+            mutableOption.timesEncountered = mutableOption.timesTaken
+        }
+        options.insert(mutableOption)
+        
+    }
+    
+    // MARK: - Private
+    
     private func calculateConfidence( option:Option ) -> Double {
         
         guard options.contains(option) else {
