@@ -13,6 +13,7 @@
 		7D35CB331CDB169B009511E5 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D35CB321CDB169B009511E5 /* Option.swift */; };
 		7D35CB351CDB18C0009511E5 /* Study.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D35CB341CDB18C0009511E5 /* Study.swift */; };
 		7D35CB371CDB197A009511E5 /* Prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D35CB361CDB197A009511E5 /* Prediction.swift */; };
+		7D35CB391CDB21A9009511E5 /* Beauchamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D35CB381CDB21A9009511E5 /* Beauchamp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		7D35CB321CDB169B009511E5 /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Option.swift; path = Model/Option.swift; sourceTree = "<group>"; };
 		7D35CB341CDB18C0009511E5 /* Study.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Study.swift; path = Model/Study.swift; sourceTree = "<group>"; };
 		7D35CB361CDB197A009511E5 /* Prediction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Prediction.swift; path = Model/Prediction.swift; sourceTree = "<group>"; };
+		7D35CB381CDB21A9009511E5 /* Beauchamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Beauchamp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 		7D35CB0D1CDB1556009511E5 = {
 			isa = PBXGroup;
 			children = (
+				7D35CB3A1CDB22CE009511E5 /* CommonCrypto */,
 				7D35CB191CDB1556009511E5 /* beauchamp */,
 				7D35CB251CDB1556009511E5 /* beauchampTests */,
 				7D35CB181CDB1556009511E5 /* Products */,
@@ -80,6 +83,7 @@
 				7D35CB311CDB1589009511E5 /* Model */,
 				7D35CB1A1CDB1556009511E5 /* beauchamp.h */,
 				7D35CB1C1CDB1556009511E5 /* Info.plist */,
+				7D35CB381CDB21A9009511E5 /* Beauchamp.swift */,
 			);
 			path = beauchamp;
 			sourceTree = "<group>";
@@ -101,6 +105,13 @@
 				7D35CB361CDB197A009511E5 /* Prediction.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		7D35CB3A1CDB22CE009511E5 /* CommonCrypto */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = CommonCrypto;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D35CB391CDB21A9009511E5 /* Beauchamp.swift in Sources */,
 				7D35CB331CDB169B009511E5 /* Option.swift in Sources */,
 				7D35CB351CDB18C0009511E5 /* Study.swift in Sources */,
 				7D35CB371CDB197A009511E5 /* Prediction.swift in Sources */,
@@ -401,6 +413,7 @@
 				7D35CB2D1CDB1556009511E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7D35CB2E1CDB1556009511E5 /* Build configuration list for PBXNativeTarget "beauchampTests" */ = {
 			isa = XCConfigurationList;
@@ -409,6 +422,7 @@
 				7D35CB301CDB1556009511E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
