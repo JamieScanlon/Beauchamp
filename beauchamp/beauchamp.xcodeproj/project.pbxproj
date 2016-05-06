@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E094C3D1CDD21FC0013329E /* Study_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E094C3C1CDD21FC0013329E /* Study_Tests.swift */; };
 		7D35CB1B1CDB1556009511E5 /* beauchamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D35CB1A1CDB1556009511E5 /* beauchamp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D35CB221CDB1556009511E5 /* beauchamp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D35CB171CDB1556009511E5 /* beauchamp.framework */; };
 		7D35CB271CDB1556009511E5 /* beauchampTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D35CB261CDB1556009511E5 /* beauchampTests.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6E094C3C1CDD21FC0013329E /* Study_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Study_Tests.swift; sourceTree = "<group>"; };
 		7D35CB171CDB1556009511E5 /* beauchamp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = beauchamp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D35CB1A1CDB1556009511E5 /* beauchamp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = beauchamp.h; sourceTree = "<group>"; };
 		7D35CB1C1CDB1556009511E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			children = (
 				7D35CB261CDB1556009511E5 /* beauchampTests.swift */,
 				7D35CB281CDB1556009511E5 /* Info.plist */,
+				6E094C3C1CDD21FC0013329E /* Study_Tests.swift */,
 			);
 			path = beauchampTests;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D35CB271CDB1556009511E5 /* beauchampTests.swift in Sources */,
+				6E094C3D1CDD21FC0013329E /* Study_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

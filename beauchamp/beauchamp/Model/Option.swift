@@ -27,16 +27,35 @@ struct Option {
         timesTaken += 1
     }
     
-    init( aDescription: String ) {
-        description = aDescription
+    init( description: String ) {
+        self.description = description
         timesTaken = 0
         timesEncountered = 0
     }
     
-    init( aDescription: String, theTimesTaken: Int, theTimesEncountered: Int ) {
-        description = aDescription
-        timesTaken = theTimesTaken
-        timesEncountered = theTimesEncountered
+    init( description: String, timesTaken: Int, timesEncountered: Int ) {
+        self.description = description
+        self.timesTaken = timesTaken
+        self.timesEncountered = timesEncountered
     }
     
+}
+
+// MARK: - Equatable
+
+extension Option: Equatable {
+    
+}
+func ==(lhs: Option, rhs: Option) -> Bool {
+    return lhs.description == rhs.description
+}
+
+// MARK: - Hashable
+
+extension Option: Hashable {
+    var hashValue: Int {
+        get {
+            return description.hashValue
+        }
+    }
 }
