@@ -81,7 +81,9 @@ struct Study {
             return 0
         }
         
-        return Double(option.timesTaken)/Double(option.timesEncountered)
+        let encounteredAsDdouble = Double(option.timesEncountered)
+        let takenAsDouble = Double(option.timesTaken)
+        return (takenAsDouble/encounteredAsDdouble) * (encounteredAsDdouble/(encounteredAsDdouble + 1))
         
     }
     

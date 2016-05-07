@@ -57,8 +57,29 @@ class Study_Tests: XCTestCase {
             return
         }
         
-        XCTAssertTrue(prediction2.confidence == 1)
+        XCTAssertTrue(prediction2.confidence == 0.5)
         XCTAssertTrue(prediction2.option == option1)
+        
+        //
+        // Test one option, one hundred times encountered, one hundred times taken
+        //
+        
+        option1.timesEncountered = 100
+        option1.timesTaken = 100
+        
+        objectUnderTest.options.insert(option1)
+        
+        XCTAssertTrue(objectUnderTest.options.count == 1)
+        
+        guard let prediction3 = objectUnderTest.getMostLikelyPrediciton() else {
+            XCTFail()
+            return
+        }
+        
+        // Confidence should asymptotically approach 1 as taken encounters go up
+        XCTAssertTrue(prediction3.confidence > 0.99)
+        XCTAssertTrue(prediction3.confidence < 1)
+        XCTAssertTrue(prediction3.option == option1)
         
     }
     
@@ -104,7 +125,7 @@ class Study_Tests: XCTestCase {
             return
         }
         
-        XCTAssertTrue(prediction4.confidence == 1)
+        XCTAssertTrue(prediction4.confidence == 0.5)
         XCTAssertTrue(prediction4.option == option1)
         
     }
