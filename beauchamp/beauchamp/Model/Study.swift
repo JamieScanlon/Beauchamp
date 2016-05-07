@@ -13,21 +13,29 @@ struct Study {
     let description: String
     var options: Set<Option> {
         didSet {
+            
             predictions = []
             for option in options {
                 predictions.append(Prediction(option: option, confidence: calculateConfidence(option)))
             }
+            
+            notifyOfChange()
+            
         }
     }
     private(set) var predictions: [Prediction] = []
     
     init(description: String, options: Set<Option>) {
+        
         self.description = description
         self.options = options
         self.predictions = []
         for option in options {
             predictions.append(Prediction(option: option, confidence: calculateConfidence(option)))
         }
+        
+        notifyOfChange()
+        
     }
     
     func getMostLikelyPrediciton() -> Prediction? {
@@ -56,6 +64,8 @@ struct Study {
             options.insert(mutableOption)
         }
         
+        notifyOfChange()
+        
     }
     
     mutating func recordOptionTaken( option: Option ) {
@@ -66,6 +76,8 @@ struct Study {
             mutableOption.timesEncountered = mutableOption.timesTaken
         }
         options.insert(mutableOption)
+        
+        notifyOfChange()
         
     }
     
@@ -84,6 +96,14 @@ struct Study {
         let encounteredAsDdouble = Double(option.timesEncountered)
         let takenAsDouble = Double(option.timesTaken)
         return (takenAsDouble/encounteredAsDdouble) * (encounteredAsDdouble/(encounteredAsDdouble + 1))
+        
+    }
+    
+    private func notifyOfChange() {
+        
+        let notificationPayload = BeauchampNotificationPayload()
+        notificationPayload.options = options
+        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload]))
         
     }
     
