@@ -10,5 +10,5 @@ Pod::Spec.new do |spec|
   spec.platform = :ios, "9.0"
   spec.requires_arc = true
   spec.source = { git: "https://github.com/JamieScanlon/beauchamp.git", tag: "v#{spec.version}" }
-  spec.source_files = "beauchamp/**/*.swift"
+  spec.source_files = "beauchamp/beauchamp/*.swift"
 end
