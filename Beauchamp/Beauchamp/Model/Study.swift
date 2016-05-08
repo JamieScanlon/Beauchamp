@@ -34,8 +34,6 @@ public struct Study {
             predictions.append(Prediction(option: option, confidence: calculateConfidence(option)))
         }
         
-        notifyOfChange()
-        
     }
     
     public func getMostLikelyPrediciton() -> Prediction? {
