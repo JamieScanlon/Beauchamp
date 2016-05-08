@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6E094C3D1CDD21FC0013329E /* Study_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E094C3C1CDD21FC0013329E /* Study_Tests.swift */; };
-		7D35CB1B1CDB1556009511E5 /* beauchamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D35CB1A1CDB1556009511E5 /* beauchamp.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7D35CB221CDB1556009511E5 /* beauchamp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D35CB171CDB1556009511E5 /* beauchamp.framework */; };
+		7D35CB1B1CDB1556009511E5 /* Beauchamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D35CB1A1CDB1556009511E5 /* Beauchamp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7D35CB221CDB1556009511E5 /* Beauchamp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D35CB171CDB1556009511E5 /* Beauchamp.framework */; };
 		7D35CB271CDB1556009511E5 /* beauchampTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D35CB261CDB1556009511E5 /* beauchampTests.swift */; };
 		7D35CB331CDB169B009511E5 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D35CB321CDB169B009511E5 /* Option.swift */; };
 		7D35CB351CDB18C0009511E5 /* Study.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D35CB341CDB18C0009511E5 /* Study.swift */; };
@@ -29,10 +29,10 @@
 
 /* Begin PBXFileReference section */
 		6E094C3C1CDD21FC0013329E /* Study_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Study_Tests.swift; sourceTree = "<group>"; };
-		7D35CB171CDB1556009511E5 /* beauchamp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = beauchamp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7D35CB1A1CDB1556009511E5 /* beauchamp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = beauchamp.h; sourceTree = "<group>"; };
+		7D35CB171CDB1556009511E5 /* Beauchamp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Beauchamp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D35CB1A1CDB1556009511E5 /* Beauchamp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beauchamp.h; sourceTree = "<group>"; };
 		7D35CB1C1CDB1556009511E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7D35CB211CDB1556009511E5 /* beauchampTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = beauchampTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D35CB211CDB1556009511E5 /* Beauchamp.temp_caseinsensitive_renameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Beauchamp.temp_caseinsensitive_renameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D35CB261CDB1556009511E5 /* beauchampTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = beauchampTests.swift; sourceTree = "<group>"; };
 		7D35CB281CDB1556009511E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D35CB321CDB169B009511E5 /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Option.swift; path = Model/Option.swift; sourceTree = "<group>"; };
@@ -53,7 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D35CB221CDB1556009511E5 /* beauchamp.framework in Frameworks */,
+				7D35CB221CDB1556009511E5 /* Beauchamp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,8 +63,8 @@
 		7D35CB0D1CDB1556009511E5 = {
 			isa = PBXGroup;
 			children = (
-				7D35CB191CDB1556009511E5 /* beauchamp */,
-				7D35CB251CDB1556009511E5 /* beauchampTests */,
+				7D35CB191CDB1556009511E5 /* Beauchamp */,
+				7D35CB251CDB1556009511E5 /* BeauchampTests */,
 				7D35CB181CDB1556009511E5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -72,30 +72,32 @@
 		7D35CB181CDB1556009511E5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7D35CB171CDB1556009511E5 /* beauchamp.framework */,
-				7D35CB211CDB1556009511E5 /* beauchampTests.xctest */,
+				7D35CB171CDB1556009511E5 /* Beauchamp.framework */,
+				7D35CB211CDB1556009511E5 /* Beauchamp.temp_caseinsensitive_renameTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7D35CB191CDB1556009511E5 /* beauchamp */ = {
+		7D35CB191CDB1556009511E5 /* Beauchamp */ = {
 			isa = PBXGroup;
 			children = (
 				7D35CB311CDB1589009511E5 /* Model */,
-				7D35CB1A1CDB1556009511E5 /* beauchamp.h */,
+				7D35CB1A1CDB1556009511E5 /* Beauchamp.h */,
 				7D35CB1C1CDB1556009511E5 /* Info.plist */,
 				7D35CB381CDB21A9009511E5 /* Beauchamp.swift */,
 			);
+			name = Beauchamp;
 			path = beauchamp;
 			sourceTree = "<group>";
 		};
-		7D35CB251CDB1556009511E5 /* beauchampTests */ = {
+		7D35CB251CDB1556009511E5 /* BeauchampTests */ = {
 			isa = PBXGroup;
 			children = (
 				7D35CB261CDB1556009511E5 /* beauchampTests.swift */,
 				7D35CB281CDB1556009511E5 /* Info.plist */,
 				6E094C3C1CDD21FC0013329E /* Study_Tests.swift */,
 			);
+			name = BeauchampTests;
 			path = beauchampTests;
 			sourceTree = "<group>";
 		};
@@ -116,16 +118,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D35CB1B1CDB1556009511E5 /* beauchamp.h in Headers */,
+				7D35CB1B1CDB1556009511E5 /* Beauchamp.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		7D35CB161CDB1556009511E5 /* beauchamp */ = {
+		7D35CB161CDB1556009511E5 /* Beauchamp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D35CB2B1CDB1556009511E5 /* Build configuration list for PBXNativeTarget "beauchamp" */;
+			buildConfigurationList = 7D35CB2B1CDB1556009511E5 /* Build configuration list for PBXNativeTarget "Beauchamp" */;
 			buildPhases = (
 				7D35CB121CDB1556009511E5 /* Sources */,
 				7D35CB131CDB1556009511E5 /* Frameworks */,
@@ -136,14 +138,14 @@
 			);
 			dependencies = (
 			);
-			name = beauchamp;
+			name = Beauchamp;
 			productName = beauchamp;
-			productReference = 7D35CB171CDB1556009511E5 /* beauchamp.framework */;
+			productReference = 7D35CB171CDB1556009511E5 /* Beauchamp.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		7D35CB201CDB1556009511E5 /* beauchampTests */ = {
+		7D35CB201CDB1556009511E5 /* BeauchampTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D35CB2E1CDB1556009511E5 /* Build configuration list for PBXNativeTarget "beauchampTests" */;
+			buildConfigurationList = 7D35CB2E1CDB1556009511E5 /* Build configuration list for PBXNativeTarget "BeauchampTests" */;
 			buildPhases = (
 				7D35CB1D1CDB1556009511E5 /* Sources */,
 				7D35CB1E1CDB1556009511E5 /* Frameworks */,
@@ -154,9 +156,9 @@
 			dependencies = (
 				7D35CB241CDB1556009511E5 /* PBXTargetDependency */,
 			);
-			name = beauchampTests;
+			name = BeauchampTests;
 			productName = beauchampTests;
-			productReference = 7D35CB211CDB1556009511E5 /* beauchampTests.xctest */;
+			productReference = 7D35CB211CDB1556009511E5 /* Beauchamp.temp_caseinsensitive_renameTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -177,7 +179,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7D35CB111CDB1556009511E5 /* Build configuration list for PBXProject "beauchamp" */;
+			buildConfigurationList = 7D35CB111CDB1556009511E5 /* Build configuration list for PBXProject "Beauchamp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -189,8 +191,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7D35CB161CDB1556009511E5 /* beauchamp */,
-				7D35CB201CDB1556009511E5 /* beauchampTests */,
+				7D35CB161CDB1556009511E5 /* Beauchamp */,
+				7D35CB201CDB1556009511E5 /* BeauchampTests */,
 			);
 		};
 /* End PBXProject section */
@@ -238,7 +240,7 @@
 /* Begin PBXTargetDependency section */
 		7D35CB241CDB1556009511E5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7D35CB161CDB1556009511E5 /* beauchamp */;
+			target = 7D35CB161CDB1556009511E5 /* Beauchamp */;
 			targetProxy = 7D35CB231CDB1556009511E5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -345,7 +347,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = beauchamp/Info.plist;
+				INFOPLIST_FILE = Beauchamp/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tenthlettermade.beauchamp;
@@ -363,7 +365,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = beauchamp/Info.plist;
+				INFOPLIST_FILE = Beauchamp/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tenthlettermade.beauchamp;
@@ -375,27 +377,27 @@
 		7D35CB2F1CDB1556009511E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = beauchampTests/Info.plist;
+				INFOPLIST_FILE = BeauchampTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tenthlettermade.beauchampTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Beauchamp.temp_caseinsensitive_renameTests;
 			};
 			name = Debug;
 		};
 		7D35CB301CDB1556009511E5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = beauchampTests/Info.plist;
+				INFOPLIST_FILE = BeauchampTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tenthlettermade.beauchampTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Beauchamp.temp_caseinsensitive_renameTests;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7D35CB111CDB1556009511E5 /* Build configuration list for PBXProject "beauchamp" */ = {
+		7D35CB111CDB1556009511E5 /* Build configuration list for PBXProject "Beauchamp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D35CB291CDB1556009511E5 /* Debug */,
@@ -404,7 +406,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7D35CB2B1CDB1556009511E5 /* Build configuration list for PBXNativeTarget "beauchamp" */ = {
+		7D35CB2B1CDB1556009511E5 /* Build configuration list for PBXNativeTarget "Beauchamp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D35CB2C1CDB1556009511E5 /* Debug */,
@@ -413,7 +415,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7D35CB2E1CDB1556009511E5 /* Build configuration list for PBXNativeTarget "beauchampTests" */ = {
+		7D35CB2E1CDB1556009511E5 /* Build configuration list for PBXNativeTarget "BeauchampTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D35CB2F1CDB1556009511E5 /* Debug */,

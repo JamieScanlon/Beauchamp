@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7D35CB161CDB1556009511E5"
-               BuildableName = "beauchamp.framework"
-               BlueprintName = "beauchamp"
-               ReferencedContainer = "container:beauchamp.xcodeproj">
+               BuildableName = "Beauchamp.framework"
+               BlueprintName = "Beauchamp"
+               ReferencedContainer = "container:Beauchamp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7D35CB201CDB1556009511E5"
-               BuildableName = "beauchampTests.xctest"
-               BlueprintName = "beauchampTests"
-               ReferencedContainer = "container:beauchamp.xcodeproj">
+               BuildableName = "Beauchamp.temp_caseinsensitive_renameTests.xctest"
+               BlueprintName = "BeauchampTests"
+               ReferencedContainer = "container:Beauchamp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D35CB161CDB1556009511E5"
-            BuildableName = "beauchamp.framework"
-            BlueprintName = "beauchamp"
-            ReferencedContainer = "container:beauchamp.xcodeproj">
+            BuildableName = "Beauchamp.framework"
+            BlueprintName = "Beauchamp"
+            ReferencedContainer = "container:Beauchamp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -65,9 +65,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D35CB161CDB1556009511E5"
-            BuildableName = "beauchamp.framework"
-            BlueprintName = "beauchamp"
-            ReferencedContainer = "container:beauchamp.xcodeproj">
+            BuildableName = "Beauchamp.framework"
+            BlueprintName = "Beauchamp"
+            ReferencedContainer = "container:Beauchamp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -83,9 +83,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D35CB161CDB1556009511E5"
-            BuildableName = "beauchamp.framework"
-            BlueprintName = "beauchamp"
-            ReferencedContainer = "container:beauchamp.xcodeproj">
+            BuildableName = "Beauchamp.framework"
+            BlueprintName = "Beauchamp"
+            ReferencedContainer = "container:Beauchamp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -1,15 +1,15 @@
 //
-//  beauchampTests.swift
-//  beauchampTests
+//  BeauchampTests.swift
+//  BeauchampTests
 //
 //  Created by Jamie Scanlon on 5/4/16.
 //  Copyright © 2016 TenthLetterMade. All rights reserved.
 //
 
 import XCTest
-@testable import beauchamp
+@testable import Beauchamp
 
-class beauchampTests: XCTestCase {
+class BeauchampTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

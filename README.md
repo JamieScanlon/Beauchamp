@@ -1,4 +1,4 @@
-# beauchamp
+# Beauchamp
 A behavior prediction engine
 
 Pre-release

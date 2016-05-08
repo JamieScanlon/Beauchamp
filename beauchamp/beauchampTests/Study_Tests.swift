@@ -1,13 +1,13 @@
 //
 //  Study_Tests.swift
-//  beauchamp
+//  Beauchamp
 //
 //  Created by Jamie Scanlon on 5/6/16.
 //  Copyright © 2016 TenthLetterMade. All rights reserved.
 //
 
 import XCTest
-@testable import beauchamp
+@testable import Beauchamp
 
 class Study_Tests: XCTestCase {
     

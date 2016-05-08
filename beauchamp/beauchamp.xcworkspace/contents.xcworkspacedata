@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:beauchamp.xcodeproj">
+      location = "container:/Users/jamie/Documents/Projects/beauchamp/beauchamp/Beauchamp.xcodeproj">
    </FileRef>
 </Workspace>
