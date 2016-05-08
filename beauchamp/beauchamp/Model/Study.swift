@@ -103,6 +103,7 @@ struct Study {
         
         let notificationPayload = BeauchampNotificationPayload()
         notificationPayload.options = options
+        notificationPayload.studySescription = description
         NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload]))
         
     }

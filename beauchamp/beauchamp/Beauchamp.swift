@@ -13,5 +13,6 @@ let BeauchampStudyChangeNotification = "com.tenthlettermade.beauchamp.BeauchampS
 class BeauchampNotificationPayload: NSObject {
     
     var options: Set<Option>?
+    var studySescription: String?
     
 }
