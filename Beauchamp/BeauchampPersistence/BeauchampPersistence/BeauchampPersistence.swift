@@ -11,16 +11,16 @@ import Beauchamp
 
 public class BeauchampFilePersistence {
     
-    static let sharedInstance = BeauchampFilePersistence()
+    public static let sharedInstance = BeauchampFilePersistence()
     public var saveDirectory: NSURL?
     public private(set) var lastSaveFailed: Bool = false
     
-    convenience init(saveDirectory: NSURL) {
+    convenience public init(saveDirectory: NSURL) {
         self.init()
         self.saveDirectory = saveDirectory
     }
     
-    init() {
+    public init() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BeauchampFilePersistence.handaleChangeNotification(_:)), name: BeauchampStudyChangeNotification, object: nil)
     }
     
