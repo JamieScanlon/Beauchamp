@@ -11,6 +11,7 @@
 		7D063B1A1CDECB1D005E0F29 /* BeauchampPersistence.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D063B0F1CDECB1D005E0F29 /* BeauchampPersistence.framework */; };
 		7D063B1F1CDECB1D005E0F29 /* BeauchampPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D063B1E1CDECB1D005E0F29 /* BeauchampPersistenceTests.swift */; };
 		7D063B2A1CDECB38005E0F29 /* Beauchamp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D063B291CDECB38005E0F29 /* Beauchamp.framework */; };
+		7D063B2C1CDECC81005E0F29 /* BeauchampPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D063B2B1CDECC81005E0F29 /* BeauchampPersistence.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,7 @@
 		7D063B1E1CDECB1D005E0F29 /* BeauchampPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeauchampPersistenceTests.swift; sourceTree = "<group>"; };
 		7D063B201CDECB1D005E0F29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D063B291CDECB38005E0F29 /* Beauchamp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Beauchamp.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Beauchamp-byovtqrrgiwagdbxahuwpqqvvddi/Build/Products/Debug-iphoneos/Beauchamp.framework"; sourceTree = "<group>"; };
+		7D063B2B1CDECC81005E0F29 /* BeauchampPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeauchampPersistence.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			children = (
 				7D063B121CDECB1D005E0F29 /* BeauchampPersistence.h */,
 				7D063B141CDECB1D005E0F29 /* Info.plist */,
+				7D063B2B1CDECC81005E0F29 /* BeauchampPersistence.swift */,
 			);
 			path = BeauchampPersistence;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D063B2C1CDECC81005E0F29 /* BeauchampPersistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +318,7 @@
 		7D063B241CDECB1D005E0F29 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -324,12 +329,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tenthlettermade.BeauchampPersistence;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		7D063B251CDECB1D005E0F29 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

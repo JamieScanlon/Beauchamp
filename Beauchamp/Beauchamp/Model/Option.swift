@@ -43,7 +43,7 @@ public struct Option {
 
 // MARK: - Equatable
 
-public extension Option: Equatable {
+extension Option: Equatable {
     
 }
 public func ==(lhs: Option, rhs: Option) -> Bool {
@@ -52,8 +52,8 @@ public func ==(lhs: Option, rhs: Option) -> Bool {
 
 // MARK: - Hashable
 
-public extension Option: Hashable {
-    var hashValue: Int {
+extension Option: Hashable {
+    public var hashValue: Int {
         get {
             return description.hashValue
         }
