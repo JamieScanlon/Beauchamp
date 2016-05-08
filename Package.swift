@@ -25,5 +25,5 @@
 import PackageDescription
 
 let package = Package(
-  name: "beauchamp"
+  name: "Beauchamp"
 )
