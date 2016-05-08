@@ -82,6 +82,10 @@ override func viewWillAppear(animated: Bool) {
 
 In this example, the proper default tab is selected only if the `confifence` is above 0.5. `getTabIndexOfOption` is a function that returns the index of the tab that an `Option` in the `Study` represents.
 
+## BeauchampPersistence
+
+BeauchampPersistence is an optional add-on framework that can be used to save study data locally and reload it on app launch.
+
 ## Roadmap
 1. Add a user defaults persistence class to the BeauchampPersistence framework
 2. Add a time wighted prediction where most recent options are weighted more heavily
