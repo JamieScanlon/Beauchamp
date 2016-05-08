@@ -8,32 +8,32 @@
 
 import Foundation
 
-struct Option {
+public struct Option {
     
-    let description: String
-    var timesEncountered: Int
-    var timesTaken: Int
-    var percentageTaken: Double {
+    public let description: String
+    public var timesEncountered: Int
+    public var timesTaken: Int
+    public  var percentageTaken: Double {
         get {
             return Double(timesTaken)/Double(timesEncountered)
         }
     }
     
-    mutating func incrementTimesEncountered() {
+    mutating public func incrementTimesEncountered() {
         timesEncountered += 1
     }
     
-    mutating func incrementTimesTaken() {
+    mutating public func incrementTimesTaken() {
         timesTaken += 1
     }
     
-    init( description: String ) {
+    public init( description: String ) {
         self.description = description
         timesTaken = 0
         timesEncountered = 0
     }
     
-    init( description: String, timesTaken: Int, timesEncountered: Int ) {
+    public init( description: String, timesTaken: Int, timesEncountered: Int ) {
         self.description = description
         self.timesTaken = timesTaken
         self.timesEncountered = timesEncountered
@@ -43,16 +43,16 @@ struct Option {
 
 // MARK: - Equatable
 
-extension Option: Equatable {
+public extension Option: Equatable {
     
 }
-func ==(lhs: Option, rhs: Option) -> Bool {
+public func ==(lhs: Option, rhs: Option) -> Bool {
     return lhs.description == rhs.description
 }
 
 // MARK: - Hashable
 
-extension Option: Hashable {
+public extension Option: Hashable {
     var hashValue: Int {
         get {
             return description.hashValue

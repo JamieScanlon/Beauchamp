@@ -8,11 +8,11 @@
 
 import Foundation
 
-let BeauchampStudyChangeNotification = "com.tenthlettermade.beauchamp.BeauchampStudyChangeNotification"
+public let BeauchampStudyChangeNotification = "com.tenthlettermade.beauchamp.BeauchampStudyChangeNotification"
 
-class BeauchampNotificationPayload: NSObject {
+public class BeauchampNotificationPayload: NSObject {
     
-    var options: Set<Option>?
-    var studySescription: String?
+    public var options: Set<Option>?
+    public var studySescription: String?
     
 }

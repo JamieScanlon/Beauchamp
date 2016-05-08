@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct Study {
+public struct Study {
     
-    let description: String
-    var options: Set<Option> {
+    public let description: String
+    public var options: Set<Option> {
         didSet {
             
             predictions = []
@@ -23,9 +23,9 @@ struct Study {
             
         }
     }
-    private(set) var predictions: [Prediction] = []
+    public private(set) var predictions: [Prediction] = []
     
-    init(description: String, options: Set<Option>) {
+    public init(description: String, options: Set<Option>) {
         
         self.description = description
         self.options = options
@@ -38,7 +38,7 @@ struct Study {
         
     }
     
-    func getMostLikelyPrediciton() -> Prediction? {
+    public func getMostLikelyPrediciton() -> Prediction? {
         
         guard let firstPrediction = predictions.first else {
             return nil
@@ -54,7 +54,7 @@ struct Study {
         
     }
     
-    mutating func recordEncounter() {
+    mutating public func recordEncounter() {
         
         let myOptions = options
         options.removeAll()
@@ -68,7 +68,7 @@ struct Study {
         
     }
     
-    mutating func recordOptionTaken( option: Option ) {
+    mutating public func recordOptionTaken( option: Option ) {
         
         var mutableOption = option
         mutableOption.timesTaken += 1

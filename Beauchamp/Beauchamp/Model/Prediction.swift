@@ -8,13 +8,13 @@
 
 import Foundation
 
-struct Prediction {
+public struct Prediction {
     
-    let option: Option
+    public let option: Option
     /**
      * a number between 0 and 1 where 1 represents 100% confidence in this prediction
      * and 0 represents a blind guess.
      */
-    let confidence: Double
+    public let confidence: Double
     
 }
