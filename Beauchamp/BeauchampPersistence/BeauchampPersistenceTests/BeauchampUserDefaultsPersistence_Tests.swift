@@ -44,7 +44,7 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         
     }
     
-    func test_updates_with_notification_NEW_STUDY() {
+    func test_updates_with_notification() {
         
         // Setup BeauchampUserDefaultsPersistence
         let defaults = MockNSUserDefaults()

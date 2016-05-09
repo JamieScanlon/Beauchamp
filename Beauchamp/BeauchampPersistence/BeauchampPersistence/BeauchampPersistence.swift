@@ -68,6 +68,16 @@ public class BeauchampFilePersistence {
             return
         }
         
+        var isDir: ObjCBool = true
+        if !NSFileManager.defaultManager().fileExistsAtPath(saveDirectory.path!, isDirectory: &isDir) {
+            do {
+                try NSFileManager.defaultManager().createDirectoryAtURL(saveDirectory, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                lastSaveFailed = true
+                return
+            }
+        }
+        
         guard let userInfo = notif.userInfo,
               let payload = userInfo["payload"] as? BeauchampNotificationPayload,
               let studyOptions = payload.options,
@@ -76,7 +86,7 @@ public class BeauchampFilePersistence {
         }
         
         let encodableStudy = EncodableStudy(study: Study(description: studyDescription, options: studyOptions))
-        let fullPath = saveDirectory.URLByAppendingPathComponent("study\(studyDescription.hashValue)", isDirectory: false)
+        let fullPath = saveDirectory.URLByAppendingPathComponent("study\(studyDescription.hashValue)")
         let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(encodableStudy, toFile: fullPath.path!)
         if !isSuccessfulSave {
             lastSaveFailed = true
