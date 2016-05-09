@@ -9,6 +9,8 @@
 import Foundation
 import Beauchamp
 
+// MARK: - BeauchampFilePersistence
+
 public class BeauchampFilePersistence {
     
     public static let sharedInstance = BeauchampFilePersistence()
@@ -85,6 +87,104 @@ public class BeauchampFilePersistence {
     }
     
 }
+
+// MARK: - BeauchampUserDefaultsPersistence
+
+public class BeauchampUserDefaultsPersistence {
+    
+    public static let sharedInstance = BeauchampUserDefaultsPersistence()
+    public var defaults: NSUserDefaults?
+    public var defaultsKey: String?
+    
+    convenience public init(defaults: NSUserDefaults, key: String) {
+        self.init()
+        self.defaults = defaults
+        self.defaultsKey = key
+    }
+    
+    public init() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BeauchampFilePersistence.handaleChangeNotification(_:)), name: BeauchampStudyChangeNotification, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: BeauchampStudyChangeNotification, object: nil)
+    }
+    
+    // MARK: Methods
+    
+    public func reconstituteStudies() -> [Study]? {
+        
+        guard let defaults = defaults,
+              let defaultsKey = defaultsKey else {
+                return nil
+        }
+        
+        let studyListKey = "\(defaultsKey).studyList"
+        
+        guard let studyListData = defaults.dataForKey(studyListKey),
+              let studyList = NSKeyedUnarchiver.unarchiveObjectWithData(studyListData) as? [String] else {
+            return nil
+        }
+        
+        var studies: [Study] = []
+        for studyKey in studyList {
+            
+            let fullStudyKey = "\(defaultsKey).\(studyKey)"
+            
+            if let studyData = defaults.dataForKey(fullStudyKey),
+               let encodableStudy = NSKeyedUnarchiver.unarchiveObjectWithData(studyData) as? EncodableStudy,
+               let study = encodableStudy.study {
+                studies.append(study)
+            }
+            
+        }
+        
+        return studies
+        
+    }
+    
+    // MARK: Notification Handler
+    
+    @objc func handaleChangeNotification(notif:NSNotification) {
+        
+        guard let defaults = defaults,
+              let defaultsKey = defaultsKey else {
+                return
+        }
+        
+        guard let userInfo = notif.userInfo,
+            let payload = userInfo["payload"] as? BeauchampNotificationPayload,
+            let studyOptions = payload.options,
+            let studyDescription = payload.studyDescription else {
+                return
+        }
+        
+        let encodableStudy = EncodableStudy(study: Study(description: studyDescription, options: studyOptions))
+        let studyKey = "study\(studyDescription.hashValue)"
+        let fullStudyKey = "\(defaultsKey).\(studyKey)"
+        let studyData = NSKeyedArchiver.archivedDataWithRootObject(encodableStudy)
+        defaults.setObject(studyData, forKey: fullStudyKey)
+        
+        let studyListKey = "\(defaultsKey).studyList"
+        if let studyListData = defaults.dataForKey(studyListKey),
+           let studyList = NSKeyedUnarchiver.unarchiveObjectWithData(studyListData) as? [String] {
+            if !studyList.contains(studyKey) {
+                var mutableStudyList = studyList
+                mutableStudyList.append(studyKey)
+                let newStudyListData = NSKeyedArchiver.archivedDataWithRootObject(mutableStudyList)
+                defaults.setObject(newStudyListData, forKey: studyListKey)
+            }
+        } else {
+            let newStudyList = [studyKey]
+            let newStudyListData = NSKeyedArchiver.archivedDataWithRootObject(newStudyList)
+            defaults.setObject(newStudyListData, forKey: studyListKey)
+        }
+        
+    }
+    
+}
+
+// MARK: - EncodableStudy
 
 struct EncodableStudyPropertyKey {
     static let descriptionKey = "description"
