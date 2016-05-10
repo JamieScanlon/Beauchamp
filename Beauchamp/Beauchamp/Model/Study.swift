@@ -15,8 +15,17 @@ public struct Study {
         didSet {
             
             predictions = []
+            var maxEncounters = 0
             for option in options {
                 predictions.append(Prediction(option: option, confidence: calculateConfidence(option)))
+                maxEncounters = max(maxEncounters, option.timesEncountered)
+            }
+            
+            for option in options {
+                if option.timesEncountered != maxEncounters {
+                    var mutableOption = option
+                    mutableOption.timesEncountered = maxEncounters
+                }
             }
             
             notifyOfChange()
@@ -30,8 +39,17 @@ public struct Study {
         self.description = description
         self.options = options
         self.predictions = []
+        var maxEncounters = 0
         for option in options {
-            predictions.append(Prediction(option: option, confidence: calculateConfidence(option)))
+            self.predictions.append(Prediction(option: option, confidence: calculateConfidence(option)))
+            maxEncounters = max(maxEncounters, option.timesEncountered)
+        }
+        
+        for option in self.options {
+            if option.timesEncountered != maxEncounters {
+                var mutableOption = option
+                mutableOption.timesEncountered = maxEncounters
+            }
         }
         
     }
@@ -54,6 +72,31 @@ public struct Study {
     
     mutating public func recordEncounter() {
         
+        incrementEncounter()
+        notifyOfChange()
+        
+    }
+    
+    mutating public func recordOptionTaken( option: Option ) {
+        
+        var encounters = 0
+        if let anyOption = options.first {
+            encounters = anyOption.timesEncountered
+        }
+        
+        var mutableOption = option
+        mutableOption.timesTaken += 1
+        mutableOption.timesEncountered = encounters
+        options.insert(mutableOption)
+        
+        recordEncounter()
+        
+    }
+    
+    // MARK: - Private
+    
+    mutating private func incrementEncounter() {
+        
         let myOptions = options
         options.removeAll()
         for option in myOptions {
@@ -62,24 +105,7 @@ public struct Study {
             options.insert(mutableOption)
         }
         
-        notifyOfChange()
-        
     }
-    
-    mutating public func recordOptionTaken( option: Option ) {
-        
-        var mutableOption = option
-        mutableOption.timesTaken += 1
-        if mutableOption.timesEncountered < mutableOption.timesTaken {
-            mutableOption.timesEncountered = mutableOption.timesTaken
-        }
-        options.insert(mutableOption)
-        
-        notifyOfChange()
-        
-    }
-    
-    // MARK: - Private
     
     private func calculateConfidence( option:Option ) -> Double {
         

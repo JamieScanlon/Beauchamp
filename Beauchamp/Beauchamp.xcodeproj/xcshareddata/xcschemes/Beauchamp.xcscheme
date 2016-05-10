@@ -28,7 +28,36 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7D35CB201CDB1556009511E5"
+               BuildableName = "Beauchamp.temp_caseinsensitive_renameTests.xctest"
+               BlueprintName = "BeauchampTests"
+               ReferencedContainer = "container:Beauchamp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7D063B181CDECB1D005E0F29"
+               BuildableName = "BeauchampPersistenceTests.xctest"
+               BlueprintName = "BeauchampPersistenceTests"
+               ReferencedContainer = "container:../../Beauchamp/Beauchamp/BeauchampPersistence/BeauchampPersistence.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "7D35CB161CDB1556009511E5"
+            BuildableName = "Beauchamp.framework"
+            BlueprintName = "Beauchamp"
+            ReferencedContainer = "container:Beauchamp.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

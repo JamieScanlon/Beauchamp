@@ -170,9 +170,8 @@ class Study_Tests: XCTestCase {
         for option in objectUnderTest.options {
             if option == option2 {
                 XCTAssertTrue(option.timesTaken == 1)
-                XCTAssertTrue(option.timesEncountered == 1)
-                break
             }
+            XCTAssertTrue(option.timesEncountered == 2)
         }
         
     }
