@@ -46,16 +46,7 @@ let tabStudy = Study(description: "Home page tab navigation study", options: [op
 
 ### Recording user behavior
 
-There are two pieces of information you must record. You must record 'encounters' whenever a user is presented with the options. If you are recording a tab navigation, for example, you may want to record an encounter every time the view appears:
-
-```swift
-override func viewDidAppear(animated: Bool) {
-    super.viewDidAppear(animated)
-    tabStudy.recordEncounter()
-}
-```
-
-The next piece of information you must record is whenever the user 'takes' or chooses one of the options you have presented. For example in a tab navigation, you would want to do this when the user selects a tab:
+Let's take the example of recording user behavior for a tab navigation where the `Study` contains three options representing three tabs. After setting up the `Study` the only thing you have to do is tell Beauchamp whenever the user chooses a tab. Whenever the user 'takes' or chooses one of the options you have presented you call `recordOptionTaken(option)` with the option that was chosen by the user. For example:
 
 ```swift
 func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
