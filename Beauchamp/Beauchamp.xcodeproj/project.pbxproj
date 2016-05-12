@@ -219,10 +219,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D35CB391CDB21A9009511E5 /* Beauchamp.swift in Sources */,
 				7D35CB331CDB169B009511E5 /* Option.swift in Sources */,
 				7D35CB351CDB18C0009511E5 /* Study.swift in Sources */,
 				7D35CB371CDB197A009511E5 /* Prediction.swift in Sources */,
+				7D35CB391CDB21A9009511E5 /* Beauchamp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

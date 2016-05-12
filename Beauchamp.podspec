@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "Beauchamp"
-  spec.version = "1.0.0"
+  spec.version = "0.1.7"
   spec.summary = "A behavior prediction engine."
   spec.homepage = "https://github.com/JamieScanlon/Beauchamp"
   spec.license = { type: 'MIT', file: 'LICENSE' }
