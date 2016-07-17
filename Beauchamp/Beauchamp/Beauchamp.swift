@@ -27,7 +27,7 @@
 
 import Foundation
 
-public let BeauchampStudyChangeNotification = "com.tenthlettermade.beauchamp.BeauchampStudyChangeNotification"
+public let BeauchampStudyChangeNotification = Notification.Name("com.tenthlettermade.beauchamp.BeauchampStudyChangeNotification")
 
 public class BeauchampNotificationPayload: NSObject {
     

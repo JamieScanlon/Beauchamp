@@ -43,7 +43,7 @@ class BeauchampFilePersistence_Tests: XCTestCase {
     
     func test_init_saveDirectory() {
         
-        let tempDirectory = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("beauchamp")
+        let tempDirectory = try! URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("beauchamp")
         let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory!.path)
@@ -54,7 +54,7 @@ class BeauchampFilePersistence_Tests: XCTestCase {
     func test_updates_with_notification_NEW_STUDY() {
         
         // Setup BeauchampFilePersistence
-        let tempDirectory = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("beauchamp")
+        let tempDirectory = try! URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("beauchamp")
         let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory!.path)
@@ -75,12 +75,12 @@ class BeauchampFilePersistence_Tests: XCTestCase {
         let notificationPayload1 = BeauchampNotificationPayload()
         notificationPayload1.options = study.options
         notificationPayload1.studyDescription = study.description
-        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload1]))
+        NotificationCenter.default.post(Notification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload1]))
         
         XCTAssertFalse(objectUnderTest.lastSaveFailed)
         var isDir: ObjCBool = false
-        let filePath = tempDirectory.URLByAppendingPathComponent("study\(study.description.hashValue)", isDirectory: false)
-        XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(filePath.path!, isDirectory: &isDir))
+        let filePath = try! tempDirectory.appendingPathComponent("study\(study.description.hashValue)", isDirectory: false)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: filePath.path!, isDirectory: &isDir))
         
         // Updating an archived Study
         
@@ -90,17 +90,17 @@ class BeauchampFilePersistence_Tests: XCTestCase {
         let notificationPayload2 = BeauchampNotificationPayload()
         notificationPayload2.options = study.options
         notificationPayload2.studyDescription = study.description
-        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload2]))
+        NotificationCenter.default.post(Notification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload2]))
         
         XCTAssertFalse(objectUnderTest.lastSaveFailed)
-        XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(filePath.path!, isDirectory: &isDir))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: filePath.path!, isDirectory: &isDir))
         
     }
     
     func test_reconstituteStudies() {
         
         // Setup BeauchampFilePersistence
-        let tempDirectory = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("beauchamp")
+        let tempDirectory = try! URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("beauchamp")
         let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory!.path)
@@ -115,7 +115,7 @@ class BeauchampFilePersistence_Tests: XCTestCase {
         let notificationPayload1 = BeauchampNotificationPayload()
         notificationPayload1.options = study1.options
         notificationPayload1.studyDescription = study1.description
-        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload1]))
+        NotificationCenter.default.post(Notification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload1]))
         
         let option4 = Option(description: "Option 4", timesTaken: 50, timesEncountered: 100)
         let option5 = Option(description: "Option 5", timesTaken: 50, timesEncountered: 100)
@@ -125,7 +125,7 @@ class BeauchampFilePersistence_Tests: XCTestCase {
         let notificationPayload2 = BeauchampNotificationPayload()
         notificationPayload2.options = study2.options
         notificationPayload2.studyDescription = study2.description
-        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload2]))
+        NotificationCenter.default.post(Notification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload2]))
         
         guard let studies = objectUnderTest.reconstituteStudies() else {
             XCTFail()

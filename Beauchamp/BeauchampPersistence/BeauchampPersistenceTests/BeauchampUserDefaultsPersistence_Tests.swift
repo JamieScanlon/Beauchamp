@@ -91,23 +91,23 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         let notificationPayload1 = BeauchampNotificationPayload()
         notificationPayload1.options = study.options
         notificationPayload1.studyDescription = study.description
-        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload1]))
+        NotificationCenter.default.post(Notification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload1]))
         
         XCTAssertTrue(defaults.called_setObject_forKey)
         XCTAssertTrue(defaults.called_dataForKey)
         XCTAssertNotNil(defaults.passed_values["\(defaultsKey).studyList"])
         XCTAssertNotNil(defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"])
         
-        let studyListData = defaults.passed_values["\(defaultsKey).studyList"] as! NSData
-        guard let studyList = NSKeyedUnarchiver.unarchiveObjectWithData(studyListData) as? [String] else {
+        let studyListData = defaults.passed_values["\(defaultsKey).studyList"] as! Data
+        guard let studyList = NSKeyedUnarchiver.unarchiveObject(with: studyListData) as? [String] else {
             XCTFail()
             return
         }
         
         XCTAssertTrue(studyList.first == "study\(study.description.hashValue)")
         
-        let studyData = defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"] as! NSData
-        guard let encodableStudy = NSKeyedUnarchiver.unarchiveObjectWithData(studyData) as? EncodableStudy else {
+        let studyData = defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"] as! Data
+        guard let encodableStudy = NSKeyedUnarchiver.unarchiveObject(with: studyData) as? EncodableStudy else {
             XCTFail()
             return
         }
@@ -131,23 +131,23 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         let notificationPayload2 = BeauchampNotificationPayload()
         notificationPayload2.options = study.options
         notificationPayload2.studyDescription = study.description
-        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload2]))
+        NotificationCenter.default.post(Notification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload2]))
         
         XCTAssertTrue(defaults.called_setObject_forKey)
         XCTAssertTrue(defaults.called_dataForKey)
         XCTAssertNotNil(defaults.passed_values["\(defaultsKey).studyList"])
         XCTAssertNotNil(defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"])
         
-        let studyListData2 = defaults.passed_values["\(defaultsKey).studyList"] as! NSData
-        guard let studyList2 = NSKeyedUnarchiver.unarchiveObjectWithData(studyListData2) as? [String] else {
+        let studyListData2 = defaults.passed_values["\(defaultsKey).studyList"] as! Data
+        guard let studyList2 = NSKeyedUnarchiver.unarchiveObject(with: studyListData2) as? [String] else {
             XCTFail()
             return
         }
         
         XCTAssertTrue(studyList2.first == "study\(study.description.hashValue)")
         
-        let studyData2 = defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"] as! NSData
-        guard let encodableStudy2 = NSKeyedUnarchiver.unarchiveObjectWithData(studyData2) as? EncodableStudy else {
+        let studyData2 = defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"] as! Data
+        guard let encodableStudy2 = NSKeyedUnarchiver.unarchiveObject(with: studyData2) as? EncodableStudy else {
             XCTFail()
             return
         }
@@ -180,9 +180,9 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         
         let encodableStudy1 = EncodableStudy(study: study1)
         let encodableStudy2 = EncodableStudy(study: study2)
-        let study1Data = NSKeyedArchiver.archivedDataWithRootObject(encodableStudy1)
-        let study2Data = NSKeyedArchiver.archivedDataWithRootObject(encodableStudy2)
-        let studyListData = NSKeyedArchiver.archivedDataWithRootObject(["study\(study1.description.hashValue)", "study\(study2.description.hashValue)"])
+        let study1Data = NSKeyedArchiver.archivedData(withRootObject: encodableStudy1)
+        let study2Data = NSKeyedArchiver.archivedData(withRootObject: encodableStudy2)
+        let studyListData = NSKeyedArchiver.archivedData(withRootObject: ["study\(study1.description.hashValue)", "study\(study2.description.hashValue)"])
         defaults.return_dataForKeys = ["\(defaultsKey).studyList": studyListData, "\(defaultsKey).study\(study1.description.hashValue)": study1Data, "\(defaultsKey).study\(study2.description.hashValue)": study2Data]
         
         // Setup BeauchampUserDefaultsPersistence
@@ -210,7 +210,7 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
     
 }
 
-class MockNSUserDefaults: NSUserDefaults {
+class MockNSUserDefaults: UserDefaults {
     
     var called_setObject_forKey = false
     var called_dataForKey = false
@@ -219,14 +219,14 @@ class MockNSUserDefaults: NSUserDefaults {
     
     var return_dataForKeys: [String: AnyObject?] = [:]
     
-    override func setObject(value: AnyObject?, forKey defaultName: String) {
+    override func set(_ value: AnyObject?, forKey defaultName: String) {
         called_setObject_forKey = true
         passed_values[defaultName] = value
     }
     
-    override func dataForKey(defaultName: String) -> NSData? {
+    override func data(forKey defaultName: String) -> Data? {
         called_dataForKey = true
-        if let value = return_dataForKeys[defaultName] as? NSData {
+        if let value = return_dataForKeys[defaultName] as? Data {
             return value
         }
         return nil

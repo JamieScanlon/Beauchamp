@@ -96,7 +96,7 @@ public struct Study {
         
     }
     
-    mutating public func recordOptionTaken( option: Option ) {
+    mutating public func recordTaken(option: Option) {
         
         var encounters = 0
         if let anyOption = options.first {
@@ -106,10 +106,15 @@ public struct Study {
         var mutableOption = option
         mutableOption.timesTaken += 1
         mutableOption.timesEncountered = encounters
-        options.insert(mutableOption)
+        update(option:mutableOption)
         
         recordEncounter()
         
+    }
+    
+    mutating public func update(option: Option) {
+        options.remove(option)
+        options.insert(option)
     }
     
     // MARK: - Private
@@ -121,12 +126,12 @@ public struct Study {
         for option in myOptions {
             var mutableOption = option
             mutableOption.timesEncountered += 1
-            options.insert(mutableOption)
+            update(option:mutableOption)
         }
         
     }
     
-    private func calculateConfidence( option:Option ) -> Double {
+    private func calculateConfidence( _ option:Option ) -> Double {
         
         guard options.contains(option) else {
             return 0
@@ -147,7 +152,8 @@ public struct Study {
         let notificationPayload = BeauchampNotificationPayload()
         notificationPayload.options = options
         notificationPayload.studyDescription = description
-        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload]))
+        let notif = Notification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload])
+        NotificationCenter.default.post(notif)
         
     }
     

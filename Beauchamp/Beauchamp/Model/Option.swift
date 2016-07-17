@@ -46,13 +46,13 @@ public struct Option {
         timesTaken += 1
     }
     
-    public init( description: String ) {
+    public init(description: String) {
         self.description = description
         timesTaken = 0
         timesEncountered = 0
     }
     
-    public init( description: String, timesTaken: Int, timesEncountered: Int ) {
+    public init(description: String, timesTaken: Int, timesEncountered: Int) {
         self.description = description
         self.timesTaken = timesTaken
         self.timesEncountered = timesEncountered

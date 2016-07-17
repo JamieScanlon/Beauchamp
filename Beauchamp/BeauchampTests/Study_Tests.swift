@@ -67,7 +67,7 @@ class Study_Tests: XCTestCase {
         option1.timesEncountered = 1
         option1.timesTaken = 1
         
-        objectUnderTest.options.insert(option1)
+        objectUnderTest.update(option:option1)
         
         XCTAssertTrue(objectUnderTest.options.count == 1)
         
@@ -86,7 +86,7 @@ class Study_Tests: XCTestCase {
         option1.timesEncountered = 100
         option1.timesTaken = 100
         
-        objectUnderTest.options.insert(option1)
+        objectUnderTest.update(option:option1)
         
         XCTAssertTrue(objectUnderTest.options.count == 1)
         
@@ -115,8 +115,8 @@ class Study_Tests: XCTestCase {
         option1.timesEncountered = 0
         option1.timesTaken = 0
         
-        objectUnderTest.options.insert(option1)
-        objectUnderTest.options.insert(option2)
+        objectUnderTest.update(option:option1)
+        objectUnderTest.update(option:option2)
         
         XCTAssertTrue(objectUnderTest.options.count == 2)
         
@@ -135,7 +135,7 @@ class Study_Tests: XCTestCase {
         option1.timesTaken = 1
         option2.timesEncountered = 1
         
-        objectUnderTest.options.insert(option1)
+        objectUnderTest.update(option:option1)
         
         XCTAssertTrue(objectUnderTest.options.count == 2)
         
@@ -168,7 +168,7 @@ class Study_Tests: XCTestCase {
         
     }
     
-    func test_recordOptionTaken() {
+    func test_recordTakenOprion() {
         
         let option1 = Option(description: "Option 1")
         let option2 = Option(description: "Option 2")
@@ -177,12 +177,12 @@ class Study_Tests: XCTestCase {
         XCTAssertTrue(objectUnderTest.options.first?.timesTaken == 0)
         XCTAssertTrue(objectUnderTest.options.first?.timesEncountered == 0)
         
-        objectUnderTest.recordOptionTaken(option1)
+        objectUnderTest.recordTaken(option:option1)
         
         XCTAssertTrue(objectUnderTest.options.first?.timesTaken == 1)
         XCTAssertTrue(objectUnderTest.options.first?.timesEncountered == 1)
         
-        objectUnderTest.recordOptionTaken(option2)
+        objectUnderTest.recordTaken(option:option2)
         
         XCTAssertTrue(objectUnderTest.options.count == 2)
         
