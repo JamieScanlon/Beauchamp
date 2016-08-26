@@ -183,7 +183,7 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         let study1Data = NSKeyedArchiver.archivedData(withRootObject: encodableStudy1)
         let study2Data = NSKeyedArchiver.archivedData(withRootObject: encodableStudy2)
         let studyListData = NSKeyedArchiver.archivedData(withRootObject: ["study\(study1.description.hashValue)", "study\(study2.description.hashValue)"])
-        defaults.return_dataForKeys = ["\(defaultsKey).studyList": studyListData, "\(defaultsKey).study\(study1.description.hashValue)": study1Data, "\(defaultsKey).study\(study2.description.hashValue)": study2Data]
+        defaults.return_dataForKeys = ["\(defaultsKey).studyList": studyListData as Optional<AnyObject>, "\(defaultsKey).study\(study1.description.hashValue)": study1Data as Optional<AnyObject>, "\(defaultsKey).study\(study2.description.hashValue)": study2Data as Optional<AnyObject>]
         
         // Setup BeauchampUserDefaultsPersistence
         let objectUnderTest = BeauchampUserDefaultsPersistence(defaults: defaults, key: defaultsKey)
@@ -215,11 +215,11 @@ class MockNSUserDefaults: UserDefaults {
     var called_setObject_forKey = false
     var called_dataForKey = false
     
-    var passed_values: [String: AnyObject?] = [:]
+    var passed_values: [String: Any?] = [:]
     
-    var return_dataForKeys: [String: AnyObject?] = [:]
+    var return_dataForKeys: [String: Any?] = [:]
     
-    override func set(_ value: AnyObject?, forKey defaultName: String) {
+    override func set(_ value: Any?, forKey defaultName: String) {
         called_setObject_forKey = true
         passed_values[defaultName] = value
     }

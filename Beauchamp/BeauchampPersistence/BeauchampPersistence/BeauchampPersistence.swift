@@ -258,7 +258,7 @@ class EncodableStudy: NSObject, NSCoding {
         
         aCoder.encode(study.description, forKey: EncodableStudyPropertyKey.descriptionKey)
         
-        var options: [[String: AnyObject]] = []
+        var options: [[String: Any]] = []
         for option in study.options {
             options.append(["description": option.description, "timesTaken": option.timesTaken, "timesEncountered": option.timesEncountered])
         }
