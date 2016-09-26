@@ -1,35 +1,16 @@
 //
-//  BeauchampUserDefaultsPersistence_Tests.swift
+//  BeauchampCloudKitPersistence_Tests.swift
 //  BeauchampPersistence
 //
-//  The MIT License (MIT)
-//
-//  Copyright (c) 2016 JamieScanlon
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in all
-//  copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//  SOFTWARE.
+//  Created by Jamie Scanlon on 9/26/16.
+//  Copyright © 2016 TenthLetterMade. All rights reserved.
 //
 
 import XCTest
 import Beauchamp
 @testable import BeauchampPersistence
 
-class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
+class BeauchampCloudKitPersistence_Tests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -41,36 +22,38 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         super.tearDown()
     }
     
-    func test_init_deafults_key() {
+    func test_init_key() {
         
-        let defaults = MockNSUserDefaults()
-        let defaultsKey = "com.tenthlettermade.beauchamp_tests"
-        let objectUnderTest = BeauchampUserDefaultsPersistence(defaults: defaults, key: defaultsKey)
+        let ubiquitousStore = MockNSUbiquitousKeyValueStore()
+        let ubiquitousStoreKey = "com.tenthlettermade.beauchamp_tests"
+        let objectUnderTest = BeauchampCloudKitPersistence(ubiquitousStore: ubiquitousStore, key: ubiquitousStoreKey)
         
-        guard let key = objectUnderTest.defaultsKey else {
+        XCTAssertTrue(ubiquitousStore.called_synchronize)
+        
+        guard let key = objectUnderTest.ubiquitousStoreKey else {
             XCTFail()
             return
         }
         
-        XCTAssertTrue(key == defaultsKey)
+        XCTAssertTrue(key == ubiquitousStoreKey)
         
-        guard let theDefaults = objectUnderTest.defaults else {
+        guard let theUbiquitousStore = objectUnderTest.ubiquitousStore else {
             XCTFail()
             return
         }
         
-        XCTAssertTrue(theDefaults === defaults)
+        XCTAssertTrue(theUbiquitousStore === ubiquitousStore)
         
     }
     
     func test_updates_with_notification() {
         
         // Setup BeauchampUserDefaultsPersistence
-        let defaults = MockNSUserDefaults()
-        let defaultsKey = "com.tenthlettermade.beauchamp_tests"
-        let objectUnderTest = BeauchampUserDefaultsPersistence(defaults: defaults, key: defaultsKey)
-        XCTAssertNotNil(objectUnderTest.defaults)
-        XCTAssertNotNil(objectUnderTest.defaultsKey)
+        let ubiquitousStore = MockNSUbiquitousKeyValueStore()
+        let ubiquitousStoreKey = "com.tenthlettermade.beauchamp_tests"
+        let objectUnderTest = BeauchampCloudKitPersistence(ubiquitousStore: ubiquitousStore, key: ubiquitousStoreKey)
+        XCTAssertNotNil(objectUnderTest.ubiquitousStoreKey)
+        XCTAssertNotNil(objectUnderTest.ubiquitousStore)
         
         // Setup Study
         let option1 = Option(description: "Option 1", timesTaken: 2, timesEncountered: 10)
@@ -84,8 +67,8 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         
         // Archiving a new Study
         
-        XCTAssertFalse(defaults.called_setObject_forKey)
-        XCTAssertFalse(defaults.called_dataForKey)
+        XCTAssertFalse(ubiquitousStore.called_setObject_forKey)
+        XCTAssertFalse(ubiquitousStore.called_dataForKey)
         
         // Post a notification
         let notificationPayload1 = BeauchampNotificationPayload()
@@ -93,12 +76,12 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         notificationPayload1.studyDescription = study.description
         NotificationCenter.default.post(Notification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload1]))
         
-        XCTAssertTrue(defaults.called_setObject_forKey)
-        XCTAssertTrue(defaults.called_dataForKey)
-        XCTAssertNotNil(defaults.passed_values["\(defaultsKey).studyList"])
-        XCTAssertNotNil(defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"])
+        XCTAssertTrue(ubiquitousStore.called_setObject_forKey)
+        XCTAssertTrue(ubiquitousStore.called_dataForKey)
+        XCTAssertNotNil(ubiquitousStore.passed_values["\(ubiquitousStoreKey).studyList"])
+        XCTAssertNotNil(ubiquitousStore.passed_values["\(ubiquitousStoreKey).study\(study.description.hashValue)"])
         
-        let studyListData = defaults.passed_values["\(defaultsKey).studyList"] as! Data
+        let studyListData = ubiquitousStore.passed_values["\(ubiquitousStoreKey).studyList"] as! Data
         guard let studyList = NSKeyedUnarchiver.unarchiveObject(with: studyListData) as? [String] else {
             XCTFail()
             return
@@ -106,7 +89,7 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         
         XCTAssertTrue(studyList.first == "study\(study.description.hashValue)")
         
-        let studyData = defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"] as! Data
+        let studyData = ubiquitousStore.passed_values["\(ubiquitousStoreKey).study\(study.description.hashValue)"] as! Data
         guard let encodableStudy = NSKeyedUnarchiver.unarchiveObject(with: studyData) as? EncodableStudy else {
             XCTFail()
             return
@@ -123,9 +106,9 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         // Updating an archived Study
         
         study = Study(description: "Study 1", options: [option3])
-        defaults.called_setObject_forKey = false
-        defaults.called_dataForKey = false
-        defaults.passed_values = [:]
+        ubiquitousStore.called_setObject_forKey = false
+        ubiquitousStore.called_dataForKey = false
+        ubiquitousStore.passed_values = [:]
         
         // Post a notification
         let notificationPayload2 = BeauchampNotificationPayload()
@@ -133,12 +116,12 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         notificationPayload2.studyDescription = study.description
         NotificationCenter.default.post(Notification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload2]))
         
-        XCTAssertTrue(defaults.called_setObject_forKey)
-        XCTAssertTrue(defaults.called_dataForKey)
-        XCTAssertNotNil(defaults.passed_values["\(defaultsKey).studyList"])
-        XCTAssertNotNil(defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"])
+        XCTAssertTrue(ubiquitousStore.called_setObject_forKey)
+        XCTAssertTrue(ubiquitousStore.called_dataForKey)
+        XCTAssertNotNil(ubiquitousStore.passed_values["\(ubiquitousStoreKey).studyList"])
+        XCTAssertNotNil(ubiquitousStore.passed_values["\(ubiquitousStoreKey).study\(study.description.hashValue)"])
         
-        let studyListData2 = defaults.passed_values["\(defaultsKey).studyList"] as! Data
+        let studyListData2 = ubiquitousStore.passed_values["\(ubiquitousStoreKey).studyList"] as! Data
         guard let studyList2 = NSKeyedUnarchiver.unarchiveObject(with: studyListData2) as? [String] else {
             XCTFail()
             return
@@ -146,7 +129,7 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         
         XCTAssertTrue(studyList2.first == "study\(study.description.hashValue)")
         
-        let studyData2 = defaults.passed_values["\(defaultsKey).study\(study.description.hashValue)"] as! Data
+        let studyData2 = ubiquitousStore.passed_values["\(ubiquitousStoreKey).study\(study.description.hashValue)"] as! Data
         guard let encodableStudy2 = NSKeyedUnarchiver.unarchiveObject(with: studyData2) as? EncodableStudy else {
             XCTFail()
             return
@@ -165,8 +148,8 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
     func test_reconstituteStudies() {
         
         // Setup Defaults
-        let defaults = MockNSUserDefaults()
-        let defaultsKey = "com.tenthlettermade.beauchamp_tests"
+        let ubiquitousStore = MockNSUbiquitousKeyValueStore()
+        let ubiquitousStoreKey = "com.tenthlettermade.beauchamp_tests"
         
         // Setup Studies
         let option1 = Option(description: "Option 1", timesTaken: 4, timesEncountered: 9)
@@ -183,12 +166,10 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
         let study1Data = NSKeyedArchiver.archivedData(withRootObject: encodableStudy1)
         let study2Data = NSKeyedArchiver.archivedData(withRootObject: encodableStudy2)
         let studyListData = NSKeyedArchiver.archivedData(withRootObject: ["study\(study1.description.hashValue)", "study\(study2.description.hashValue)"])
-        defaults.return_dataForKeys = ["\(defaultsKey).studyList": studyListData as Optional<AnyObject>, "\(defaultsKey).study\(study1.description.hashValue)": study1Data as Optional<AnyObject>, "\(defaultsKey).study\(study2.description.hashValue)": study2Data as Optional<AnyObject>]
+        ubiquitousStore.return_dataForKeys = ["\(ubiquitousStoreKey).studyList": studyListData as Optional<AnyObject>, "\(ubiquitousStoreKey).study\(study1.description.hashValue)": study1Data as Optional<AnyObject>, "\(ubiquitousStoreKey).study\(study2.description.hashValue)": study2Data as Optional<AnyObject>]
         
         // Setup BeauchampUserDefaultsPersistence
-        let objectUnderTest = BeauchampUserDefaultsPersistence(defaults: defaults, key: defaultsKey)
-        XCTAssertNotNil(objectUnderTest.defaults)
-        XCTAssertNotNil(objectUnderTest.defaultsKey)
+        let objectUnderTest = BeauchampCloudKitPersistence(ubiquitousStore: ubiquitousStore, key: ubiquitousStoreKey)
         
         guard let studies = objectUnderTest.reconstituteStudies() else {
             XCTFail()
@@ -210,8 +191,9 @@ class BeauchampUserDefaultsPersistence_Tests: XCTestCase {
     
 }
 
-fileprivate class MockNSUserDefaults: UserDefaults {
+fileprivate class MockNSUbiquitousKeyValueStore: NSUbiquitousKeyValueStore {
     
+    var called_synchronize = false
     var called_setObject_forKey = false
     var called_dataForKey = false
     
@@ -230,6 +212,11 @@ fileprivate class MockNSUserDefaults: UserDefaults {
             return value
         }
         return nil
+    }
+    
+    override func synchronize() -> Bool {
+        called_synchronize = true
+        return true
     }
     
 }

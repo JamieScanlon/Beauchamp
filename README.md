@@ -156,7 +156,7 @@ beauchampPersistance.ubiquitousStoreKey = ubiquitousStoreKey
 
 ### Loading persisted Studies
 
-In order to load in `Study` objects that were previously saved by `BeauchampFilePersistence` or `BeauchampUserDefaultsPersistence` you simple call the `reconstituteStudies()` on either which will return an array of `Study` objects or nil if there is not yet any data. For example:
+In order to load in `Study` objects that were previously saved by `BeauchampFilePersistence`, `BeauchampUserDefaultsPersistence`, or `BeauchampCloudKitPersistence` you simple call the `reconstituteStudies()` on either which will return an array of `Study` objects or nil if there is not yet any data. For example:
 
 ```swift
 if let studies = beauchampPersistance.reconstituteStudies() {

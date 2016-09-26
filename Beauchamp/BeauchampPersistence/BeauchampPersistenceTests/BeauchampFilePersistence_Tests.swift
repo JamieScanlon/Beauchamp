@@ -101,6 +101,7 @@ class BeauchampFilePersistence_Tests: XCTestCase {
         
         // Setup BeauchampFilePersistence
         let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("beauchamp")
+        print("Saving BeauchampFilePersistence in temp directory: \(tempDirectory.path)")
         let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory!.path)

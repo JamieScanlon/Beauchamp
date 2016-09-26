@@ -28,9 +28,15 @@
 import Foundation
 import Beauchamp
 
+// MARK: - BeauchampPersistence
+
+public protocol BeauchampPersistence {
+    func reconstituteStudies() -> [Study]?
+}
+
 // MARK: - BeauchampFilePersistence
 
-public class BeauchampFilePersistence {
+public class BeauchampFilePersistence: BeauchampPersistence {
     
     public static let sharedInstance = BeauchampFilePersistence()
     public var saveDirectory: URL?
@@ -118,7 +124,7 @@ public class BeauchampFilePersistence {
 
 // MARK: - BeauchampUserDefaultsPersistence
 
-public class BeauchampUserDefaultsPersistence {
+public class BeauchampUserDefaultsPersistence: BeauchampPersistence {
     
     public static let sharedInstance = BeauchampUserDefaultsPersistence()
     public var defaults: UserDefaults?
@@ -207,6 +213,123 @@ public class BeauchampUserDefaultsPersistence {
             let newStudyListData = NSKeyedArchiver.archivedData(withRootObject: newStudyList)
             defaults.set(newStudyListData, forKey: studyListKey)
         }
+        
+    }
+    
+}
+
+// MARK: - BeauchampCloudKitPersistence
+
+public class BeauchampCloudKitPersistence : BeauchampPersistence {
+    
+    public static let sharedInstance = BeauchampCloudKitPersistence()
+    public var ubiquitousStore: NSUbiquitousKeyValueStore? {
+        didSet {
+            NotificationCenter.default.removeObserver(self, name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: oldValue)
+            if let ubiquitousStore = ubiquitousStore {
+                NotificationCenter.default.addObserver(self, selector: #selector(BeauchampCloudKitPersistence.handleStudyChangeNotification(notif:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self.ubiquitousStore)
+                ubiquitousStore.synchronize()
+            }
+        }
+    }
+    public var ubiquitousStoreKey: String?
+    
+    convenience public init(ubiquitousStore: NSUbiquitousKeyValueStore, key: String) {
+        self.init()
+        self.ubiquitousStore = ubiquitousStore
+        self.ubiquitousStoreKey = key
+        NotificationCenter.default.addObserver(self, selector: #selector(BeauchampCloudKitPersistence.handleStudyChangeNotification(notif:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self.ubiquitousStore)
+        self.ubiquitousStore?.synchronize()
+    }
+    
+    public init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(BeauchampCloudKitPersistence.handleStudyChangeNotification(notif:)), name: BeauchampStudyChangeNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: BeauchampStudyChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self.ubiquitousStore)
+    }
+    
+    // MARK: Methods
+    
+    public func reconstituteStudies() -> [Study]? {
+        
+        guard let ubiquitousStoreKey = ubiquitousStoreKey else {
+            return nil
+        }
+        
+        guard let ubiquitousStore = ubiquitousStore else {
+            return nil
+        }
+        
+        let studyListKey = "\(ubiquitousStoreKey).studyList"
+        
+        guard let studyListData = ubiquitousStore.data(forKey: studyListKey),
+            let studyList = NSKeyedUnarchiver.unarchiveObject(with: studyListData) as? [String] else {
+                return nil
+        }
+        
+        var studies: [Study] = []
+        for studyKey in studyList {
+            
+            let fullStudyKey = "\(ubiquitousStoreKey).\(studyKey)"
+            
+            if let studyData = ubiquitousStore.data(forKey: fullStudyKey),
+                let encodableStudy = NSKeyedUnarchiver.unarchiveObject(with: studyData) as? EncodableStudy,
+                let study = encodableStudy.study {
+                studies.append(study)
+            }
+            
+        }
+        
+        return studies
+        
+    }
+    
+    // MARK: Notification Handler
+    
+    @objc func handleStudyChangeNotification(notif:NSNotification) {
+        
+        guard let ubiquitousStoreKey = ubiquitousStoreKey else {
+            return
+        }
+        
+        guard let ubiquitousStore = ubiquitousStore else {
+            return
+        }
+        
+        guard let userInfo = notif.userInfo,
+            let payload = userInfo["payload"] as? BeauchampNotificationPayload,
+            let studyOptions = payload.options,
+            let studyDescription = payload.studyDescription else {
+                return
+        }
+        
+        let encodableStudy = EncodableStudy(study: Study(description: studyDescription, options: studyOptions))
+        let studyKey = "study\(studyDescription.hashValue)"
+        let fullStudyKey = "\(ubiquitousStoreKey).\(studyKey)"
+        let studyData = NSKeyedArchiver.archivedData(withRootObject: encodableStudy)
+        ubiquitousStore.set(studyData, forKey: fullStudyKey)
+        
+        let studyListKey = "\(ubiquitousStoreKey).studyList"
+        if let studyListData = ubiquitousStore.data(forKey: studyListKey),
+            let studyList = NSKeyedUnarchiver.unarchiveObject(with: studyListData) as? [String] {
+            if !studyList.contains(studyKey) {
+                var mutableStudyList = studyList
+                mutableStudyList.append(studyKey)
+                let newStudyListData = NSKeyedArchiver.archivedData(withRootObject: mutableStudyList)
+                ubiquitousStore.set(newStudyListData, forKey: studyListKey)
+            }
+        } else {
+            let newStudyList = [studyKey]
+            let newStudyListData = NSKeyedArchiver.archivedData(withRootObject: newStudyList)
+            ubiquitousStore.set(newStudyListData, forKey: studyListKey)
+        }
+        
+    }
+    
+    @objc func handleStoreChangeNotification(notif:NSNotification) {
         
     }
     

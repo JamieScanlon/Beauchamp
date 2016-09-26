@@ -12,6 +12,7 @@
 		7D063B1F1CDECB1D005E0F29 /* BeauchampPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D063B1E1CDECB1D005E0F29 /* BeauchampPersistenceTests.swift */; };
 		7D063B2C1CDECC81005E0F29 /* BeauchampPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D063B2B1CDECC81005E0F29 /* BeauchampPersistence.swift */; };
 		7D063B941CE0FBD6005E0F29 /* BeauchampUserDefaultsPersistence_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D063B931CE0FBD6005E0F29 /* BeauchampUserDefaultsPersistence_Tests.swift */; };
+		7D1D9DB81D998A640003697B /* BeauchampCloudKitPersistence_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D9DB71D998A640003697B /* BeauchampCloudKitPersistence_Tests.swift */; };
 		7D5B20351CE1172E00C51F2A /* Beauchamp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D5B20341CE1172E00C51F2A /* Beauchamp.framework */; };
 		7D5B20391CE118FE00C51F2A /* BeauchampFilePersistence_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5B20381CE118FE00C51F2A /* BeauchampFilePersistence_Tests.swift */; };
 /* End PBXBuildFile section */
@@ -35,6 +36,7 @@
 		7D063B201CDECB1D005E0F29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D063B2B1CDECC81005E0F29 /* BeauchampPersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeauchampPersistence.swift; sourceTree = "<group>"; };
 		7D063B931CE0FBD6005E0F29 /* BeauchampUserDefaultsPersistence_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeauchampUserDefaultsPersistence_Tests.swift; sourceTree = "<group>"; };
+		7D1D9DB71D998A640003697B /* BeauchampCloudKitPersistence_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeauchampCloudKitPersistence_Tests.swift; sourceTree = "<group>"; };
 		7D5B20341CE1172E00C51F2A /* Beauchamp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Beauchamp.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Beauchamp-byovtqrrgiwagdbxahuwpqqvvddi/Build/Products/Debug-iphonesimulator/Beauchamp.framework"; sourceTree = "<group>"; };
 		7D5B20381CE118FE00C51F2A /* BeauchampFilePersistence_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeauchampFilePersistence_Tests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,6 +97,7 @@
 				7D063B201CDECB1D005E0F29 /* Info.plist */,
 				7D063B931CE0FBD6005E0F29 /* BeauchampUserDefaultsPersistence_Tests.swift */,
 				7D5B20381CE118FE00C51F2A /* BeauchampFilePersistence_Tests.swift */,
+				7D1D9DB71D998A640003697B /* BeauchampCloudKitPersistence_Tests.swift */,
 			);
 			path = BeauchampPersistenceTests;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				7D5B20391CE118FE00C51F2A /* BeauchampFilePersistence_Tests.swift in Sources */,
 				7D063B1F1CDECB1D005E0F29 /* BeauchampPersistenceTests.swift in Sources */,
 				7D063B941CE0FBD6005E0F29 /* BeauchampUserDefaultsPersistence_Tests.swift in Sources */,
+				7D1D9DB81D998A640003697B /* BeauchampCloudKitPersistence_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
