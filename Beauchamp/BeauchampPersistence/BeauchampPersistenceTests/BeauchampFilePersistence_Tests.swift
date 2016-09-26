@@ -44,10 +44,10 @@ class BeauchampFilePersistence_Tests: XCTestCase {
     func test_init_saveDirectory() {
         
         let tempDirectory = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("beauchamp")
-        let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory)
+        let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory!)
         XCTAssertNotNil(objectUnderTest.saveDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory!.path)
-        XCTAssertTrue(objectUnderTest.saveDirectory!.path! == tempDirectory.path!)
+        XCTAssertTrue(objectUnderTest.saveDirectory!.path! == tempDirectory!.path!)
         
     }
     
@@ -55,7 +55,7 @@ class BeauchampFilePersistence_Tests: XCTestCase {
         
         // Setup BeauchampFilePersistence
         let tempDirectory = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("beauchamp")
-        let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory)
+        let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory!)
         XCTAssertNotNil(objectUnderTest.saveDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory!.path)
         
@@ -79,8 +79,8 @@ class BeauchampFilePersistence_Tests: XCTestCase {
         
         XCTAssertFalse(objectUnderTest.lastSaveFailed)
         var isDir: ObjCBool = false
-        let filePath = tempDirectory.URLByAppendingPathComponent("study\(study.description.hashValue)", isDirectory: false)
-        XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(filePath.path!, isDirectory: &isDir))
+        let fileURL = (tempDirectory!.URLByAppendingPathComponent("study\(study.description.hashValue)", isDirectory: false))!
+        XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(fileURL.path!, isDirectory: &isDir))
         
         // Updating an archived Study
         
@@ -93,7 +93,7 @@ class BeauchampFilePersistence_Tests: XCTestCase {
         NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: BeauchampStudyChangeNotification, object: nil, userInfo: ["payload": notificationPayload2]))
         
         XCTAssertFalse(objectUnderTest.lastSaveFailed)
-        XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(filePath.path!, isDirectory: &isDir))
+        XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(fileURL.path!, isDirectory: &isDir))
         
     }
     
@@ -101,7 +101,7 @@ class BeauchampFilePersistence_Tests: XCTestCase {
         
         // Setup BeauchampFilePersistence
         let tempDirectory = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("beauchamp")
-        let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory)
+        let objectUnderTest = BeauchampFilePersistence(saveDirectory:tempDirectory!)
         XCTAssertNotNil(objectUnderTest.saveDirectory)
         XCTAssertNotNil(objectUnderTest.saveDirectory!.path)
         

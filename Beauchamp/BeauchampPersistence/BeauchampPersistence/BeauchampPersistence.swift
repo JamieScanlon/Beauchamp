@@ -74,9 +74,10 @@ public class BeauchampFilePersistence: BeauchampPersistence {
         var studies: [Study] = []
         for filename in directoryContent {
             if filename.hasPrefix("study"),
-               let filePath = saveDirectory.URLByAppendingPathComponent(filename, isDirectory: false).path,
-               let encodableStudy = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? EncodableStudy,
-               let study = encodableStudy.study {
+                let fileURL = saveDirectory.URLByAppendingPathComponent(filename, isDirectory: false),
+                let filePath = fileURL.path,
+                let encodableStudy = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? EncodableStudy,
+                let study = encodableStudy.study {
                 studies.append(study)
             }
         }
@@ -93,8 +94,12 @@ public class BeauchampFilePersistence: BeauchampPersistence {
             return
         }
         
+        guard let savePath = saveDirectory.path else {
+            return
+        }
+        
         var isDir: ObjCBool = true
-        if !NSFileManager.defaultManager().fileExistsAtPath(saveDirectory.path!, isDirectory: &isDir) {
+        if !NSFileManager.defaultManager().fileExistsAtPath(savePath, isDirectory: &isDir) {
             do {
                 try NSFileManager.defaultManager().createDirectoryAtURL(saveDirectory, withIntermediateDirectories: true, attributes: nil)
             } catch {
@@ -111,10 +116,13 @@ public class BeauchampFilePersistence: BeauchampPersistence {
         }
         
         let encodableStudy = EncodableStudy(study: Study(description: studyDescription, options: studyOptions))
-        let fullPath = saveDirectory.URLByAppendingPathComponent("study\(studyDescription.hashValue)")
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(encodableStudy, toFile: fullPath.path!)
-        if !isSuccessfulSave {
-            lastSaveFailed = true
+        if let fullURL = saveDirectory.URLByAppendingPathComponent("study\(studyDescription.hashValue)"), let fullPath = fullURL.path {
+            let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(encodableStudy, toFile: fullPath)
+            if !isSuccessfulSave {
+                lastSaveFailed = true
+            } else {
+                lastSaveFailed = false
+            }
         } else {
             lastSaveFailed = false
         }
