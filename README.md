@@ -169,3 +169,4 @@ if let studies = beauchampPersistance.reconstituteStudies() {
 ## Roadmap
 1. Add a time weighted prediction where most recent options are weighted more heavily
 2. Add an Obj-C wrapper
+3. Machine learning.
