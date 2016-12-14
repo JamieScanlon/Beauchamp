@@ -39,34 +39,34 @@ public protocol BeauchampPersistence {
 public class BeauchampFilePersistence: BeauchampPersistence {
     
     public static let sharedInstance = BeauchampFilePersistence()
-    public var saveDirectory: NSURL?
+    public var saveDirectory: URL?
     public private(set) var lastSaveFailed: Bool = false
     
-    convenience public init(saveDirectory: NSURL) {
+    convenience public init(saveDirectory: URL) {
         self.init()
         self.saveDirectory = saveDirectory
     }
     
     public init() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BeauchampFilePersistence.handaleChangeNotification(_:)), name: BeauchampStudyChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BeauchampFilePersistence.handaleChangeNotification(_:)), name: BeauchampStudyChangeNotification, object: nil)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: BeauchampStudyChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: BeauchampStudyChangeNotification, object: nil)
     }
     
     // MARK: Methods
     
     public func reconstituteStudies() -> [Study]? {
         
-        guard let saveDirectory = saveDirectory,
-              let directoryPath = saveDirectory.path else {
+        guard let saveDirectory = saveDirectory else {
             return nil
         }
         
+        let directoryPath = saveDirectory.path
         var directoryContent: [String] = []
         do {
-            directoryContent = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(directoryPath)
+            directoryContent = try FileManager.default.contentsOfDirectory(atPath: directoryPath)
         } catch {
             return nil
         }
@@ -74,9 +74,7 @@ public class BeauchampFilePersistence: BeauchampPersistence {
         var studies: [Study] = []
         for filename in directoryContent {
             if filename.hasPrefix("study"),
-                let fileURL = saveDirectory.URLByAppendingPathComponent(filename, isDirectory: false),
-                let filePath = fileURL.path,
-                let encodableStudy = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? EncodableStudy,
+               let encodableStudy = NSKeyedUnarchiver.unarchiveObject(withFile: saveDirectory.appendingPathComponent(filename, isDirectory: false).path) as? EncodableStudy,
                 let study = encodableStudy.study {
                 studies.append(study)
             }
@@ -88,27 +86,23 @@ public class BeauchampFilePersistence: BeauchampPersistence {
     
     // MARK: Notification Handler
     
-    @objc func handaleChangeNotification(notif:NSNotification) {
+    @objc func handaleChangeNotification(_ notif:Notification) {
         
         guard let saveDirectory = saveDirectory else {
             return
         }
         
-        guard let savePath = saveDirectory.path else {
-            return
-        }
-        
         var isDir: ObjCBool = true
-        if !NSFileManager.defaultManager().fileExistsAtPath(savePath, isDirectory: &isDir) {
+        if !FileManager.default.fileExists(atPath: saveDirectory.path, isDirectory: &isDir) {
             do {
-                try NSFileManager.defaultManager().createDirectoryAtURL(saveDirectory, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(at: saveDirectory, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 lastSaveFailed = true
                 return
             }
         }
         
-        guard let userInfo = notif.userInfo,
+        guard let userInfo = (notif as NSNotification).userInfo,
               let payload = userInfo["payload"] as? BeauchampNotificationPayload,
               let studyOptions = payload.options,
               let studyDescription = payload.studyDescription else {
@@ -116,13 +110,10 @@ public class BeauchampFilePersistence: BeauchampPersistence {
         }
         
         let encodableStudy = EncodableStudy(study: Study(description: studyDescription, options: studyOptions))
-        if let fullURL = saveDirectory.URLByAppendingPathComponent("study\(studyDescription.hashValue)"), let fullPath = fullURL.path {
-            let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(encodableStudy, toFile: fullPath)
-            if !isSuccessfulSave {
-                lastSaveFailed = true
-            } else {
-                lastSaveFailed = false
-            }
+        let fullPath = saveDirectory.appendingPathComponent("study\(studyDescription.hashValue)")
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(encodableStudy, toFile: fullPath.path)
+        if !isSuccessfulSave {
+            lastSaveFailed = true
         } else {
             lastSaveFailed = false
         }
@@ -136,21 +127,21 @@ public class BeauchampFilePersistence: BeauchampPersistence {
 public class BeauchampUserDefaultsPersistence: BeauchampPersistence {
     
     public static let sharedInstance = BeauchampUserDefaultsPersistence()
-    public var defaults: NSUserDefaults?
+    public var defaults: UserDefaults?
     public var defaultsKey: String?
     
-    convenience public init(defaults: NSUserDefaults, key: String) {
+    convenience public init(defaults: UserDefaults, key: String) {
         self.init()
         self.defaults = defaults
         self.defaultsKey = key
     }
     
     public init() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BeauchampFilePersistence.handaleChangeNotification(_:)), name: BeauchampStudyChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BeauchampFilePersistence.handaleChangeNotification(_:)), name: BeauchampStudyChangeNotification, object: nil)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: BeauchampStudyChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: BeauchampStudyChangeNotification, object: nil)
     }
     
     // MARK: Methods
@@ -164,8 +155,8 @@ public class BeauchampUserDefaultsPersistence: BeauchampPersistence {
         
         let studyListKey = "\(defaultsKey).studyList"
         
-        guard let studyListData = defaults.dataForKey(studyListKey),
-              let studyList = NSKeyedUnarchiver.unarchiveObjectWithData(studyListData) as? [String] else {
+        guard let studyListData = defaults.data(forKey: studyListKey),
+              let studyList = NSKeyedUnarchiver.unarchiveObject(with: studyListData) as? [String] else {
             return nil
         }
         
@@ -174,8 +165,8 @@ public class BeauchampUserDefaultsPersistence: BeauchampPersistence {
             
             let fullStudyKey = "\(defaultsKey).\(studyKey)"
             
-            if let studyData = defaults.dataForKey(fullStudyKey),
-               let encodableStudy = NSKeyedUnarchiver.unarchiveObjectWithData(studyData) as? EncodableStudy,
+            if let studyData = defaults.data(forKey: fullStudyKey),
+               let encodableStudy = NSKeyedUnarchiver.unarchiveObject(with: studyData) as? EncodableStudy,
                let study = encodableStudy.study {
                 studies.append(study)
             }
@@ -188,14 +179,14 @@ public class BeauchampUserDefaultsPersistence: BeauchampPersistence {
     
     // MARK: Notification Handler
     
-    @objc func handaleChangeNotification(notif:NSNotification) {
+    @objc func handaleChangeNotification(_ notif:Notification) {
         
         guard let defaults = defaults,
               let defaultsKey = defaultsKey else {
                 return
         }
         
-        guard let userInfo = notif.userInfo,
+        guard let userInfo = (notif as NSNotification).userInfo,
             let payload = userInfo["payload"] as? BeauchampNotificationPayload,
             let studyOptions = payload.options,
             let studyDescription = payload.studyDescription else {
@@ -205,22 +196,22 @@ public class BeauchampUserDefaultsPersistence: BeauchampPersistence {
         let encodableStudy = EncodableStudy(study: Study(description: studyDescription, options: studyOptions))
         let studyKey = "study\(studyDescription.hashValue)"
         let fullStudyKey = "\(defaultsKey).\(studyKey)"
-        let studyData = NSKeyedArchiver.archivedDataWithRootObject(encodableStudy)
-        defaults.setObject(studyData, forKey: fullStudyKey)
+        let studyData = NSKeyedArchiver.archivedData(withRootObject: encodableStudy)
+        defaults.set(studyData, forKey: fullStudyKey)
         
         let studyListKey = "\(defaultsKey).studyList"
-        if let studyListData = defaults.dataForKey(studyListKey),
-           let studyList = NSKeyedUnarchiver.unarchiveObjectWithData(studyListData) as? [String] {
+        if let studyListData = defaults.data(forKey: studyListKey),
+           let studyList = NSKeyedUnarchiver.unarchiveObject(with: studyListData) as? [String] {
             if !studyList.contains(studyKey) {
                 var mutableStudyList = studyList
                 mutableStudyList.append(studyKey)
-                let newStudyListData = NSKeyedArchiver.archivedDataWithRootObject(mutableStudyList)
-                defaults.setObject(newStudyListData, forKey: studyListKey)
+                let newStudyListData = NSKeyedArchiver.archivedData(withRootObject: mutableStudyList)
+                defaults.set(newStudyListData, forKey: studyListKey)
             }
         } else {
             let newStudyList = [studyKey]
-            let newStudyListData = NSKeyedArchiver.archivedDataWithRootObject(newStudyList)
-            defaults.setObject(newStudyListData, forKey: studyListKey)
+            let newStudyListData = NSKeyedArchiver.archivedData(withRootObject: newStudyList)
+            defaults.set(newStudyListData, forKey: studyListKey)
         }
         
     }
@@ -229,25 +220,35 @@ public class BeauchampUserDefaultsPersistence: BeauchampPersistence {
 
 // MARK: - BeauchampCloudKitPersistence
 
-public class BeauchampCloudKitPersistence : BeauchampPersistence{
+public class BeauchampCloudKitPersistence : BeauchampPersistence {
     
     public static let sharedInstance = BeauchampCloudKitPersistence()
+    public var ubiquitousStore: NSUbiquitousKeyValueStore? {
+        didSet {
+            NotificationCenter.default.removeObserver(self, name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: oldValue)
+            if let ubiquitousStore = ubiquitousStore {
+                NotificationCenter.default.addObserver(self, selector: #selector(BeauchampCloudKitPersistence.handleStudyChangeNotification(notif:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self.ubiquitousStore)
+                ubiquitousStore.synchronize()
+            }
+        }
+    }
     public var ubiquitousStoreKey: String?
     
-    convenience public init(key: String) {
+    convenience public init(ubiquitousStore: NSUbiquitousKeyValueStore, key: String) {
         self.init()
+        self.ubiquitousStore = ubiquitousStore
         self.ubiquitousStoreKey = key
+        NotificationCenter.default.addObserver(self, selector: #selector(BeauchampCloudKitPersistence.handleStudyChangeNotification(notif:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self.ubiquitousStore)
+        self.ubiquitousStore?.synchronize()
     }
     
     public init() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BeauchampCloudKitPersistence.handleStudyChangeNotification(_:)), name: BeauchampStudyChangeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BeauchampCloudKitPersistence.handleStoreChangeNotification(_:)), name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification, object: NSUbiquitousKeyValueStore.defaultStore())
-        NSUbiquitousKeyValueStore.defaultStore().synchronize()
+        NotificationCenter.default.addObserver(self, selector: #selector(BeauchampCloudKitPersistence.handleStudyChangeNotification(notif:)), name: BeauchampStudyChangeNotification, object: nil)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: BeauchampStudyChangeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification, object: NSUbiquitousKeyValueStore.defaultStore())
+        NotificationCenter.default.removeObserver(self, name: BeauchampStudyChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self.ubiquitousStore)
     }
     
     // MARK: Methods
@@ -257,12 +258,15 @@ public class BeauchampCloudKitPersistence : BeauchampPersistence{
         guard let ubiquitousStoreKey = ubiquitousStoreKey else {
             return nil
         }
-        let ubiquitousStore = NSUbiquitousKeyValueStore.defaultStore()
+        
+        guard let ubiquitousStore = ubiquitousStore else {
+            return nil
+        }
         
         let studyListKey = "\(ubiquitousStoreKey).studyList"
         
-        guard let studyListData = ubiquitousStore.dataForKey(studyListKey),
-            let studyList = NSKeyedUnarchiver.unarchiveObjectWithData(studyListData) as? [String] else {
+        guard let studyListData = ubiquitousStore.data(forKey: studyListKey),
+            let studyList = NSKeyedUnarchiver.unarchiveObject(with: studyListData) as? [String] else {
                 return nil
         }
         
@@ -271,8 +275,8 @@ public class BeauchampCloudKitPersistence : BeauchampPersistence{
             
             let fullStudyKey = "\(ubiquitousStoreKey).\(studyKey)"
             
-            if let studyData = ubiquitousStore.dataForKey(fullStudyKey),
-                let encodableStudy = NSKeyedUnarchiver.unarchiveObjectWithData(studyData) as? EncodableStudy,
+            if let studyData = ubiquitousStore.data(forKey: fullStudyKey),
+                let encodableStudy = NSKeyedUnarchiver.unarchiveObject(with: studyData) as? EncodableStudy,
                 let study = encodableStudy.study {
                 studies.append(study)
             }
@@ -288,9 +292,12 @@ public class BeauchampCloudKitPersistence : BeauchampPersistence{
     @objc func handleStudyChangeNotification(notif:NSNotification) {
         
         guard let ubiquitousStoreKey = ubiquitousStoreKey else {
-                return
+            return
         }
-        let ubiquitousStore = NSUbiquitousKeyValueStore.defaultStore()
+        
+        guard let ubiquitousStore = ubiquitousStore else {
+            return
+        }
         
         guard let userInfo = notif.userInfo,
             let payload = userInfo["payload"] as? BeauchampNotificationPayload,
@@ -302,22 +309,22 @@ public class BeauchampCloudKitPersistence : BeauchampPersistence{
         let encodableStudy = EncodableStudy(study: Study(description: studyDescription, options: studyOptions))
         let studyKey = "study\(studyDescription.hashValue)"
         let fullStudyKey = "\(ubiquitousStoreKey).\(studyKey)"
-        let studyData = NSKeyedArchiver.archivedDataWithRootObject(encodableStudy)
-        ubiquitousStore.setObject(studyData, forKey: fullStudyKey)
+        let studyData = NSKeyedArchiver.archivedData(withRootObject: encodableStudy)
+        ubiquitousStore.set(studyData, forKey: fullStudyKey)
         
         let studyListKey = "\(ubiquitousStoreKey).studyList"
-        if let studyListData = ubiquitousStore.dataForKey(studyListKey),
-            let studyList = NSKeyedUnarchiver.unarchiveObjectWithData(studyListData) as? [String] {
+        if let studyListData = ubiquitousStore.data(forKey: studyListKey),
+            let studyList = NSKeyedUnarchiver.unarchiveObject(with: studyListData) as? [String] {
             if !studyList.contains(studyKey) {
                 var mutableStudyList = studyList
                 mutableStudyList.append(studyKey)
-                let newStudyListData = NSKeyedArchiver.archivedDataWithRootObject(mutableStudyList)
-                ubiquitousStore.setObject(newStudyListData, forKey: studyListKey)
+                let newStudyListData = NSKeyedArchiver.archivedData(withRootObject: mutableStudyList)
+                ubiquitousStore.set(newStudyListData, forKey: studyListKey)
             }
         } else {
             let newStudyList = [studyKey]
-            let newStudyListData = NSKeyedArchiver.archivedDataWithRootObject(newStudyList)
-            ubiquitousStore.setObject(newStudyListData, forKey: studyListKey)
+            let newStudyListData = NSKeyedArchiver.archivedData(withRootObject: newStudyList)
+            ubiquitousStore.set(newStudyListData, forKey: studyListKey)
         }
         
     }
@@ -345,11 +352,11 @@ class EncodableStudy: NSObject, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         
-        guard let description = aDecoder.decodeObjectForKey(EncodableStudyPropertyKey.descriptionKey) as? String else {
+        guard let description = aDecoder.decodeObject(forKey: EncodableStudyPropertyKey.descriptionKey) as? String else {
             return nil
         }
         
-        guard let optionDicts = aDecoder.decodeObjectForKey(EncodableStudyPropertyKey.optionsKey) as? [[String: AnyObject]] else {
+        guard let optionDicts = aDecoder.decodeObject(forKey: EncodableStudyPropertyKey.optionsKey) as? [[String: AnyObject]] else {
             return nil
         }
         
@@ -366,19 +373,19 @@ class EncodableStudy: NSObject, NSCoding {
         
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
+    func encode(with aCoder: NSCoder) {
         
         guard let study = study else {
             return
         }
         
-        aCoder.encodeObject(study.description, forKey: EncodableStudyPropertyKey.descriptionKey)
+        aCoder.encode(study.description, forKey: EncodableStudyPropertyKey.descriptionKey)
         
-        var options: [[String: AnyObject]] = []
+        var options: [[String: Any]] = []
         for option in study.options {
             options.append(["description": option.description, "timesTaken": option.timesTaken, "timesEncountered": option.timesEncountered])
         }
-        aCoder.encodeObject(options, forKey: EncodableStudyPropertyKey.optionsKey)
+        aCoder.encode(options, forKey: EncodableStudyPropertyKey.optionsKey)
         
     }
     

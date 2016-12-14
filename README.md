@@ -22,6 +22,7 @@ Beauchamp aims to provide a general framework for predicting user behavior based
 ## Requirements
 
 - iOS 9.0+
+- Swift 3+
 
 ## Installing Beauchamp
 
@@ -32,7 +33,7 @@ Use the [Carthage](https://github.com/Carthage/Carthage) installation instructio
 Add the following to your `Cartfile`:
 
 ```ogdl
-github "JamieScanlon/Beauchamp" >= 0.1.6
+github "JamieScanlon/Beauchamp" >= 0.3.0
 ```
 
 Run `carthage update` to build the framework
@@ -44,7 +45,7 @@ Use the [CocoaPods](http://cocoapods.org) installation instructions to setup Car
 Add the following to your `Podfile`:
 
 ```ruby
-pod 'Beauchamp', '~> 0.1.6'
+pod 'Beauchamp', '~> 0.3.0'
 ```
 
 Run `pod install` to build the framework
@@ -55,50 +56,53 @@ Manual installation is available by cloning this project and copying the source 
 
 ## Using Beauchamp
 
-Each set of choices the user can make is organized into a `Study` which contains a collection of `Option`'s. A typical `Study` would represent something like a tab navigation and each `Option` in the `Study` would represent a tab.
+Each set of choices the user can make is organized into a `Study` which contains a collection of `Option`'s. A typical `Study` would represent something like a tab navigation and each `Option` in the `Study` would represent a tab. `Option`s store information about the number of time the user has encountered the option and the number of times the user has taken the option. This data is used to predict which options the user is likely to choose in the future. In general, you will be interacting directly with one or more `Study`s which will mannage it's own `Option` objects.
 
 Start off by importing Beauchamp:
 ```swift
 import Beauchamp
 ```
 
-### Setting up a Options
-
-Set up a new `Option` by instantiating an object like so:
-
-```swift
-let option1 = Option(description: "Photos Tab")
-```
-
-The `desciption` is a required property and uniquely identifies the `Option`. Any two `Option`'s with the same description are considered the same object when placed in a `Study` so make sure your description is specific enough to uniquely describe the `Option`
-
 ### Setting up a Study
 
-Set up a new `Study` by instantiating an object like so:
+Set up a new `Study` by providing a description for the `Study` as well as a list of option descriptions. The `Study` will create and manage the `Option` objects and you will reference options by their description therefore every `Option` in a `Study` must have a unique description:
 
 ```swift
-let option1 = Option(description: "Photos Tab")
-let option2 = Option(description: "Messages Tab")
-let option3 = Option(description: "Settings Tab")
+let description1 = "Photos Tab"
+let description2 = "Messages Tab"
+let description3 = "Settings Tab"
+let tabStudy = Study(description: "Home page tab navigation study", optionDescriptions: [description1, description2, description3])
+```
+
+#### Using Options to set an inital state
+
+The example above sets up a `Study` with brand new `Option`s. Most of the time this is what you want but if you want to set up a `Study` that has some prepopulated data you can do so by providing your own `Option` objects when you initialize the `Study`.
+
+```swift
+let option1 = Option(description: "Photos Tab", timesTaken: 1, timesEncountered: 10)
+let option2 = Option(description: "Messages Tab", timesTaken: 2, timesEncountered: 10)
+let option3 = Option(description: "Settings Tab", timesTaken: 3, timesEncountered: 10)
 let tabStudy = Study(description: "Home page tab navigation study", options: [option1, option2, option3])
 ```
 
+In this example the `Study` is initialized with some prepopulated data so if you were to ask the `Study` to predict the most likely option immediately after initialization, it would predict `option3` because it has the highest `timesTaken`. It is important to note that all `Option`s in a `Study` have the same `timesEncountered` value so if you initialize the `Study` this way and do not provide the same `timesEncountered` value for all `Options`, the `Study` will use the highest `timesEncountered` and normalize all of the other `Option`s to this value.
+
 ### Recording user behavior
 
-Let's take the example of recording user behavior for a tab navigation where the `Study` contains three options representing three tabs. After setting up the `Study` the only thing you have to do is tell Beauchamp whenever the user chooses a tab. Whenever the user 'takes' or chooses one of the options you have presented you call `recordOptionTaken(option)` with the option that was chosen by the user. For example:
+Let's take the example of recording user behavior for a tab navigation where the `Study` contains three options representing three tabs. After setting up the `Study` the only thing you have to do is tell Beauchamp whenever the user chooses a tab. Whenever the user 'takes' or chooses one of the options you have presented you call `recordOptionTaken(withDescription: optionDescription)` with the option that was chosen by the user. For example:
 
 ```swift
 func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
-    let option = getOptionForViewController(viewController)
-    tabStudy.recordOptionTaken(option)
+    let optionDescription: String = getOptionForViewController(viewController)
+    tabStudy.recordOptionTaken(withDescription: optionDescription)
 }
 ```
 
-In this example `getOptionForViewController` is a function that maps the UIViewController of a tab with one of the `Option`'s in the `Study`
+In this example `getOptionForViewController` is a function that maps the UIViewController of a tab with one of the option descriptions in the `Study` i.e. "Photos Tab", "Messages Tab", or "Settings Tab" from above.
 
 ### Predicting behavior
 
-A `Prediction` object is returned by a `Study` when you request the most likely option the user will choose. The `Prediciton` objects just contains the option it predicts along with a `confidence` score. `confidence` is a number from 0 to 1 where 0 represents a blind guess and 1 represents absolute certainty. You can use this `confidence` score to determine if the prediction is useful enough to act on. Here's an example:
+A `Prediction` object is returned by a `Study` when you request the most likely option the user will choose. The `Prediciton` objects just contains the `Option` it predicts along with a `confidence` score. `confidence` is a number from 0 to 1 where 0 represents a blind guess and 1 represents absolute certainty. You can use this `confidence` score to determine if the prediction is useful enough to act on. Here's an example:
 
 ```swift
 override func viewWillAppear(animated: Bool) {
@@ -114,7 +118,7 @@ In this example, the proper default tab is selected only if the `confifence` is 
 
 ## BeauchampPersistence
 
-BeauchampPersistence is an optional add-on framework that can be used to save study data locally and reload it on app launch. BeauchampPersistence comes with two standard persistence classes that can save `Study` data in three different ways. `BeauchampFilePersistence` saves `Study` objects as files in a directory that you choose. `BeauchampUserDefaultsPersistence` saves `Study` objects to `NSUserDefaults` under a key that you choose. `BeauchampCloudKitPersistence` saves `Study` objects in CloudKit's `NSUbiquitousKeyValueStore` under a key that you choose. The persistence classes listen for notifications generated by `Study` objects when changes occur. Using the persistence classes requires only that you instantiate one with the required parameters and it will handle the rest.
+BeauchampPersistence is an optional add-on framework that can be used to save study data locally and reload it on app launch. BeauchampPersistence comes with three standard persistence classes that can save `Study` data in two different ways. `BeauchampFilePersistence` saves `Study` objects as files in a directory that you choose. `BeauchampUserDefaultsPersistence` saves `Study` objects to NSUserDefaults under a key that you choose.`BeauchampCloudKitPersistence` saves `Study` objects in CloudKit's `NSUbiquitousKeyValueStore` under a key that you choose. The persistence classes listen for notifications generated by `Study` objects when changes occur. Using the persistence classes requires only that you instantiate one with the required parameters and it will handle the rest.
 
 Start off by importing Beauchamp:
 ```swift
@@ -152,7 +156,7 @@ beauchampPersistance.ubiquitousStoreKey = ubiquitousStoreKey
 
 ### Loading persisted Studies
 
-In order to load in `Study` objects that were previously saved by `BeauchampFilePersistence`, `BeauchampUserDefaultsPersistence`, or `BeauchampCloudKitPersistence` you simple call the `reconstituteStudies()` method which will return an array of `Study` objects or nil if there is not yet any data. For example:
+In order to load in `Study` objects that were previously saved by `BeauchampFilePersistence`, `BeauchampUserDefaultsPersistence`, or `BeauchampCloudKitPersistence` you simple call the `reconstituteStudies()` on either which will return an array of `Study` objects or nil if there is not yet any data. For example:
 
 ```swift
 if let studies = beauchampPersistance.reconstituteStudies() {
@@ -165,3 +169,4 @@ if let studies = beauchampPersistance.reconstituteStudies() {
 ## Roadmap
 1. Add a time weighted prediction where most recent options are weighted more heavily
 2. Add an Obj-C wrapper
+3. Machine learning.
