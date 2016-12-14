@@ -75,7 +75,7 @@ public class BeauchampFilePersistence: BeauchampPersistence {
         for filename in directoryContent {
             if filename.hasPrefix("study"),
                let encodableStudy = NSKeyedUnarchiver.unarchiveObject(withFile: saveDirectory.appendingPathComponent(filename, isDirectory: false).path) as? EncodableStudy,
-               let study = encodableStudy.study {
+                let study = encodableStudy.study {
                 studies.append(study)
             }
         }
